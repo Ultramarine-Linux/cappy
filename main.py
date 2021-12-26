@@ -5,11 +5,12 @@ from gi.repository import Gio
 import os
 import configparser
 
+from cappy.windows.about import aboutWindow
 class MainWindow(Gtk.ApplicationWindow):
     def __init__(self):
         # Import the window from glade
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("main.ui")
+        self.builder.add_from_file("cappy/ui/main.ui")
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
         self.window.connect("destroy", Gtk.main_quit)
@@ -28,9 +29,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self.window.show_all()
     def about_dialog(self, widget, data=None):
-        about_dialog = self.builder.get_object("about_dialog")
-        about_dialog.run()
-        about_dialog.destroy()
+        aboutWindow()
     def on_addRepo_clicked(self, widget, data=None):
         print("add repo")
 # start the program
