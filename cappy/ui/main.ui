@@ -88,7 +88,6 @@ Author: Cappy Ishihara
   </object>
   <object class="GtkApplicationWindow" id="main_window">
     <property name="can-focus">False</property>
-    <property name="resizable">False</property>
     <property name="default-width">800</property>
     <property name="default-height">500</property>
     <child>
@@ -98,45 +97,81 @@ Author: Cappy Ishihara
         <property name="orientation">vertical</property>
         <property name="baseline-position">top</property>
         <child>
-          <object class="GtkTreeView" id="repoListView">
-            <property name="name">repo_list</property>
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="model">repo_list</property>
-            <property name="fixed-height-mode">True</property>
-            <property name="level-indentation">1</property>
-            <property name="enable-grid-lines">both</property>
-            <property name="enable-tree-lines">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection"/>
-            </child>
             <child>
-              <object class="GtkTreeViewColumn" id="repo_id">
-                <property name="sizing">fixed</property>
-                <property name="title" translatable="yes">Repo ID</property>
-                <child>
-                  <object class="GtkCellRendererText" id="repoid_text"/>
-                  <attributes>
-                    <attribute name="editable">0</attribute>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+              <object class="GtkTreeView" id="repoListView">
+                <property name="name">repo_list</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="model">repo_list</property>
+                <property name="fixed-height-mode">True</property>
+                <property name="show-expanders">False</property>
+                <property name="level-indentation">1</property>
+                <property name="enable-grid-lines">both</property>
+                <property name="enable-tree-lines">True</property>
+                <signal name="cursor-changed" handler="on_repoListView_move_cursor" swapped="no"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTreeViewColumn" id="repourl">
-                <property name="sizing">fixed</property>
-                <property name="title" translatable="yes">URL</property>
                 <child>
-                  <object class="GtkCellRendererText" id="repourl_text"/>
-                  <attributes>
-                    <attribute name="markup">1</attribute>
-                    <attribute name="single-paragraph-mode">1</attribute>
-                    <attribute name="text">1</attribute>
-                    <attribute name="width-chars">1</attribute>
-                    <attribute name="wrap-width">1</attribute>
-                    <attribute name="max-width-chars">1</attribute>
-                  </attributes>
+                  <object class="GtkTreeViewColumn" id="repo_id">
+                    <property name="resizable">True</property>
+                    <property name="sizing">fixed</property>
+                    <property name="title" translatable="yes">Repo ID</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="repoid_text"/>
+                      <attributes>
+                        <attribute name="editable">0</attribute>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="repourl">
+                    <property name="resizable">True</property>
+                    <property name="sizing">fixed</property>
+                    <property name="title" translatable="yes">URL</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="repourl_text"/>
+                      <attributes>
+                        <attribute name="markup">1</attribute>
+                        <attribute name="single-paragraph-mode">1</attribute>
+                        <attribute name="text">1</attribute>
+                        <attribute name="width-chars">1</attribute>
+                        <attribute name="wrap-width">1</attribute>
+                        <attribute name="max-width-chars">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="priority2">
+                    <property name="sizing">fixed</property>
+                    <property name="title" translatable="yes">Priority</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="priority1"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="enabled">
+                    <property name="sizing">fixed</property>
+                    <property name="fixed-width">26</property>
+                    <property name="min-width">5</property>
+                    <property name="title" translatable="yes">Enabled</property>
+                    <child>
+                      <object class="GtkCellRendererToggle" id="enabled_bool"/>
+                      <attributes>
+                        <attribute name="active">3</attribute>
+                      </attributes>
+                    </child>
+                  </object>
                 </child>
               </object>
             </child>
@@ -247,7 +282,7 @@ Author: Cappy Ishihara
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="repoURLEntry1">
+                      <object class="GtkEntry" id="repoMetaEntry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                       </object>
@@ -294,7 +329,7 @@ Author: Cappy Ishihara
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="GPGEntry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                       </object>
@@ -312,7 +347,7 @@ Author: Cappy Ishihara
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton">
+                  <object class="GtkCheckButton" id="GPGCheck">
                     <property name="label" translatable="yes">Check GPG keys</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -357,6 +392,7 @@ Author: Cappy Ishihara
               <object class="GtkButtonBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="spacing">8</property>
                 <property name="layout-style">start</property>
                 <child>
                   <object class="GtkButton" id="addRepo">
@@ -382,6 +418,7 @@ Author: Cappy Ishihara
                     <property name="receives-default">True</property>
                     <property name="use-stock">True</property>
                     <property name="always-show-image">True</property>
+                    <signal name="clicked" handler="remove_repo" object="repo_list" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
