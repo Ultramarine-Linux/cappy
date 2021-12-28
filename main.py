@@ -14,8 +14,15 @@ class MainWindow(Gtk.ApplicationWindow):
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
         self.window.connect("destroy", Gtk.main_quit)
+        self.loadRepoList()
+
+        self.window.show_all()
+    def loadRepoList(self=None,widget=None,data=None):
         # get the treeview repo_list
         self.repoListView = self.builder.get_object("repoListView")
+        # clear all the entries in the treeview
+        liststore = self.repoListView.get_model()
+        liststore.clear()
 
         # get the repos from all the config files from /etc/yum.repos.d
         self.repos = []
@@ -24,12 +31,8 @@ class MainWindow(Gtk.ApplicationWindow):
                 # read the config file
                 config = configparser.ConfigParser()
                 config.read("/etc/yum.repos.d/" + repo)
-                # the section name is the repo name, there can be multiple sections (repos)
                 for section in config.sections():
-                    # get the name of the repo
-                    # the repo name is the section name
                     name = section
-                    # try and get the baseurl
                     try:
                         baseurl = config[section]["baseurl"]
                     except KeyError:
@@ -58,13 +61,42 @@ class MainWindow(Gtk.ApplicationWindow):
                     liststore = self.repoListView.get_model()
                     # add the row
                     liststore.append([name, baseurl, 0, enabled])
-
-        self.window.show_all()
     def about_dialog(self, widget, data=None):
         aboutWindow()
-    def on_addRepo_clicked(self, widget, data=None):
-        print("add repo")
-    def remove_repo(self, widget, data=None):
+    def repoOption(self, widget, entry: Gtk.ListBoxRow):
+        # get the ID of the selected row
+        row = entry.get_index()
+        repoWizard = self.builder.get_object("RepoWizard")
+        # case statement to change the page
+        repoBox = self.builder.get_object("repoBox")
+        match row:
+            case 0:
+                #print("page 1")
+                # remove any existing children from repoBox
+                for child in repoBox.get_children():
+                    repoBox.remove(child)
+            case 1:
+                #print("page 2")
+                # remove any existing children from repoBox
+                for child in repoBox.get_children():
+                    repoBox.remove(child)
+            case 2:
+                #print("page 3")
+                # remove any existing children from repoBox
+                for child in repoBox.get_children():
+                    repoBox.remove(child)
+                box = self.builder.get_object("customRepo_box")
+                repoWizard.set_page_complete(repoWizard.get_nth_page(1), True)
+                # add the box to repoBox
+                repoBox.add(box)
+        repoWizard.set_page_complete(repoWizard.get_nth_page(0), True)
+    def addRepo(self, widget, data=None):
+        repoWizard = self.builder.get_object("RepoWizard")
+        repoWizard.set_title("Add Repository")
+        repoWizard.set_page_has_padding(repoWizard.get_nth_page(0), True)
+        repoWizard.connect("cancel", lambda x : repoWizard.hide())
+        repoWizard.show_all()
+    def removeRepo(self, widget, data=None):
         # get the selected row from the liststore
         selection = self.repoListView.get_selection()
         # it's a treeview so we need to get the model and the iter
