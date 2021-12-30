@@ -20,7 +20,7 @@ See the &lt;a href="https://opensource.org/licenses/mit-license.php"&gt;The MIT 
       <object class="GtkBox">
         <property name="can-focus">False</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox">
+          <object class="GtkButtonBox" id="buttons">
             <property name="can-focus">False</property>
           </object>
           <packing>
