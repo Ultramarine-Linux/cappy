@@ -1,8 +1,7 @@
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
-from gi.repository import Gio
+from gi.repository import Gtk, GtkSource, GObject, Gio
 import os
 import configparser
 
@@ -13,13 +12,15 @@ class MainWindow(Gtk.ApplicationWindow):
     def __init__(self):
         # Import the window from glade
         self.builder = Gtk.Builder()
+        GObject.type_register(GtkSource.View)
+        # need a better way to load this file properly
         self.builder.add_from_file("cappy/ui/main.ui")
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
         self.window.connect("destroy", Gtk.main_quit)
         self.loadRepoList()
+        self.window.present()
 
-        self.window.show_all()
     def loadRepoList(self=None,widget=None,data=None):
         # get the treeview repo_list
         self.repoListView = self.builder.get_object("repoListView")
@@ -70,32 +71,54 @@ class MainWindow(Gtk.ApplicationWindow):
                     # now that we have the name and baseurl, add it to the liststore in the treeview
                     liststore.append([id, name, baseurl, priority, enabled])
 
-        self.window.show_all()
 
     def about_dialog(self, widget, data=None):
         aboutWindow()
 
+    # Repo Wizard code, this is a bit messy
+
     def on_addRepo_clicked(self, widget, data=None):
-        url = self.builder.get_object("repoURLEntry").props.text
-        name = self.builder.get_object("repoNameEntry").props.text
-        excl = self.builder.get_object("repoExcludeEntry").props.text
-        meta = self.builder.get_object("repoMetaEntry").props.text
-        gpg = self.builder.get_object("GPGEntry").props.text
-        check = self.builder.get_object("GPGCheck").props.active
+        # Note to windowsboi: We have a wizard for a reason. 👳
+        repoWizard = self.builder.get_object("RepoWizard")
+        repoWizard.set_title("Add Repository")
+        repoWizard.set_page_has_padding(repoWizard.get_nth_page(0), True)
+        repoWizard.connect("cancel", lambda x : repoWizard.hide())
+        repoWizard.show()
 
-        if not (url and name):
-            return  # or err msg
+    def repoOption(self, widget, entry: Gtk.ListBoxRow):
+        row = entry.get_index()
+        repoWizard = self.builder.get_object("RepoWizard")
+        repoBox = self.builder.get_object("repoBox")
+        # replace sourcetype text for page 3
+        # need a better way to do this
+        sourceType = self.builder.get_object("repoWizard_sourceType")
+        
+        # set final repo output 
+        buffer = self.builder.get_object("repoWizard_finalRepo").get_buffer()
+        buffer.set_text("https://copr.fedoraproject.org/coprs/cappy/cappy/repo/epel-7-x86_64/")
+        
+        for child in repoBox.get_children():
+            repoBox.remove(child)
+        match row:
+            case 0:
+                sourceType.set_text("Copr")
+            case 1:
+                sourceType.set_text("Local Repository")
+                box = self.builder.get_object("localRepo_box")
+                repoWizard.set_page_complete(repoWizard.get_nth_page(1), True)
+                repoBox.add(box)
+            case 2:
+                # add the sourceType text
+                sourceType.set_text("Custom")
+                box = self.builder.get_object("customRepo_box")
+                repoWizard.set_page_complete(repoWizard.get_nth_page(1), True)
+                repoBox.add(box)
+        repoWizard.set_page_complete(repoWizard.get_nth_page(0), True)
 
-        newcfg = {
-            name: {  # TODO: id instead of name????
-                "name": name,
-                "baseurl": url,
-                "metalink": meta,
-                "gpgkey": gpg,
-                "gpgcheck": check,
-                "exclude": excl
-            }
-        }
+        # TODO: Catch the input from each of the pages and then call a repo adding function?
+
+
+
 
     def remove_repo(self, widget, data=None):
         # get the selected row from the liststore
@@ -158,8 +181,6 @@ class MainWindow(Gtk.ApplicationWindow):
                             repo_excludes.set_text("")
 
 
-# start the program
-# make the exit button work
 if __name__ == "__main__":
     MainWindow()
     Gtk.main()

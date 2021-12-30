@@ -28,6 +28,7 @@ Author: Cappy Ishihara
 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtksourceview" version="4.0"/>
   <!-- interface-license-type mit -->
   <!-- interface-name Ultramarine Repository Manager -->
   <!-- interface-description A DNF Repository editor frontend -->
@@ -290,6 +291,218 @@ Author: Cappy Ishihara
       <placeholder/>
     </child>
   </object>
+  <object class="GtkBox" id="localRepo_box">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="spacing">20</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
+        <child>
+          <object class="GtkBox" id="localRepo_name">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="xpad">8</property>
+                <property name="label" translatable="yes">Repository Name</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="input-purpose">name</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="localRepo_id">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="xpad">8</property>
+                <property name="label" translatable="yes">Repository ID</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="localRepo_url">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="xpad">8</property>
+                <property name="label" translatable="yes">Repository Location</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFileChooserButton">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="action">select-folder</property>
+                <property name="local-only">False</property>
+                <property name="title" translatable="yes">Path to the DNF repository</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="padding">18</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">8</property>
+        <child>
+          <object class="GtkCheckButton" id="localRepo_GPGCheck">
+            <property name="label" translatable="yes">Check GPG Keys</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="draw-indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="localRepo_GPGCheckRepo">
+            <property name="label" translatable="yes">Check GPG Keys for repository</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="draw-indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="localRepo_GPGurl">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="xpad">8</property>
+                <property name="label" translatable="yes">GPG Key URL</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFileChooserButton">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="title" translatable="yes"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
   <object class="GtkListStore" id="repo_list">
     <columns>
       <!-- column-name repo_id -->
@@ -315,7 +528,7 @@ Author: Cappy Ishihara
   </object>
   <object class="GtkApplicationWindow" id="main_window">
     <property name="can-focus">False</property>
-    <property name="default-width">800</property>
+    <property name="default-width">1000</property>
     <property name="default-height">500</property>
     <child>
       <object class="GtkBox">
@@ -380,13 +593,10 @@ Author: Cappy Ishihara
                 <child>
                   <object class="GtkTreeViewColumn" id="repourl">
                     <property name="resizable">True</property>
-                    <property name="spacing">30</property>
                     <property name="sizing">fixed</property>
-                    <property name="min-width">400</property>
                     <property name="title" translatable="yes">URL</property>
                     <property name="expand">True</property>
                     <property name="clickable">True</property>
-                    <property name="alignment">0.05999999865889549</property>
                     <property name="sort-indicator">True</property>
                     <property name="sort-column-id">2</property>
                     <child>
@@ -424,8 +634,11 @@ Author: Cappy Ishihara
                 <child>
                   <object class="GtkTreeViewColumn" id="enabled">
                     <property name="resizable">True</property>
-                    <property name="spacing">39</property>
+                    <property name="spacing">30</property>
                     <property name="sizing">fixed</property>
+                    <property name="fixed-width">13</property>
+                    <property name="min-width">9</property>
+                    <property name="max-width">5</property>
                     <property name="title" translatable="yes">Enabled</property>
                     <property name="expand">True</property>
                     <property name="clickable">True</property>
@@ -460,7 +673,6 @@ Author: Cappy Ishihara
                 <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">8</property>
-                <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
@@ -484,6 +696,7 @@ Author: Cappy Ishihara
                         <property name="can-focus">True</property>
                         <property name="margin-left">103</property>
                         <property name="width-chars">44</property>
+                        <property name="input-purpose">url</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -556,6 +769,7 @@ Author: Cappy Ishihara
                       <object class="GtkEntry" id="repoMetaEntry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="width-chars">40</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -605,6 +819,7 @@ Author: Cappy Ishihara
                       <object class="GtkEntry" id="repoNameEntry">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="width-chars">32</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -617,6 +832,20 @@ Author: Cappy Ishihara
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="GPGCheck">
+                    <property name="label" translatable="yes">Check GPG keys</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -647,20 +876,6 @@ Author: Cappy Ishihara
                         <property name="position">1</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="GPGCheck">
-                    <property name="label" translatable="yes">Check GPG keys</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1020,7 +1235,6 @@ Author: Cappy Ishihara
       </object>
       <packing>
         <property name="page-type">intro</property>
-        <property name="has-padding">False</property>
       </packing>
     </child>
     <child>
@@ -1033,37 +1247,97 @@ Author: Cappy Ishihara
           <placeholder/>
         </child>
       </object>
-      <packing>
-        <property name="has-padding">False</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">final page</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">8</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Repository Source:</property>
+                    <property name="width-chars">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="repoWizard_sourceType">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="xpad">8</property>
+                    <property name="label" translatable="yes">placeholder</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="xpad">0</property>
+                <property name="label" translatable="yes">Please check the final output.</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
+          <object class="GtkSourceView" id="repoWizard_finalRepo">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="editable">False</property>
+            <property name="right-margin">2</property>
+            <property name="monospace">True</property>
+            <property name="show-line-numbers">True</property>
+            <property name="show-line-marks">True</property>
+            <property name="background-pattern">grid</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
         </child>
       </object>
       <packing>
         <property name="page-type">confirm</property>
-        <property name="has-padding">False</property>
       </packing>
     </child>
     <child internal-child="action_area">
