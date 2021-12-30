@@ -294,6 +294,8 @@ Author: Cappy Ishihara
     <columns>
       <!-- column-name repo_id -->
       <column type="gchararray"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
       <!-- column-name url -->
       <column type="gchararray"/>
       <!-- column-name priority -->
@@ -301,6 +303,15 @@ Author: Cappy Ishihara
       <!-- column-name enabled -->
       <column type="gboolean"/>
     </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">fedora</col>
+        <col id="1" translatable="yes">Fedora</col>
+        <col id="2" translatable="yes">https://dl.fedoraproject.org/pub/fedora/linux/releases/35/Everything/x86_64/os/</col>
+        <col id="3">0</col>
+        <col id="4">False</col>
+      </row>
+    </data>
   </object>
   <object class="GtkApplicationWindow" id="main_window">
     <property name="can-focus">False</property>
@@ -352,6 +363,21 @@ Author: Cappy Ishihara
                   </object>
                 </child>
                 <child>
+                  <object class="GtkTreeViewColumn" id="repo_name">
+                    <property name="resizable">True</property>
+                    <property name="sizing">fixed</property>
+                    <property name="title" translatable="yes">Name</property>
+                    <property name="sort-column-id">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="reponame_text"/>
+                      <attributes>
+                        <attribute name="editable">1</attribute>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkTreeViewColumn" id="repourl">
                     <property name="resizable">True</property>
                     <property name="spacing">30</property>
@@ -362,13 +388,18 @@ Author: Cappy Ishihara
                     <property name="clickable">True</property>
                     <property name="alignment">0.05999999865889549</property>
                     <property name="sort-indicator">True</property>
-                    <property name="sort-column-id">1</property>
+                    <property name="sort-column-id">2</property>
                     <child>
                       <object class="GtkCellRendererText" id="repourl_text">
                         <property name="editable">True</property>
                       </object>
                       <attributes>
-                        <attribute name="text">1</attribute>
+                        <attribute name="markup">2</attribute>
+                        <attribute name="single-paragraph-mode">2</attribute>
+                        <attribute name="text">2</attribute>
+                        <attribute name="width-chars">2</attribute>
+                        <attribute name="wrap-width">2</attribute>
+                        <attribute name="max-width-chars">2</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -379,13 +410,13 @@ Author: Cappy Ishihara
                     <property name="title" translatable="yes">Priority</property>
                     <property name="clickable">True</property>
                     <property name="sort-indicator">True</property>
-                    <property name="sort-column-id">2</property>
+                    <property name="sort-column-id">3</property>
                     <child>
                       <object class="GtkCellRendererText" id="priority1">
                         <property name="editable">True</property>
                       </object>
                       <attributes>
-                        <attribute name="text">2</attribute>
+                        <attribute name="text">3</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -398,11 +429,11 @@ Author: Cappy Ishihara
                     <property name="title" translatable="yes">Enabled</property>
                     <property name="expand">True</property>
                     <property name="clickable">True</property>
-                    <property name="sort-column-id">3</property>
+                    <property name="sort-column-id">4</property>
                     <child>
                       <object class="GtkCellRendererToggle" id="enabled_bool"/>
                       <attributes>
-                        <attribute name="active">3</attribute>
+                        <attribute name="active">4</attribute>
                       </attributes>
                     </child>
                   </object>
@@ -561,6 +592,41 @@ Author: Cappy Ishihara
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Repository Name</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="padding">10</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="repoNameEntry">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes">Path to GPG Key</property>
                       </object>
                       <packing>
@@ -585,7 +651,7 @@ Author: Cappy Ishihara
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -623,9 +689,6 @@ Author: Cappy Ishihara
                 <property name="position">1</property>
               </packing>
             </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -656,7 +719,7 @@ Author: Cappy Ishihara
                     <property name="receives-default">True</property>
                     <property name="use-stock">True</property>
                     <property name="always-show-image">True</property>
-                    <signal name="clicked" handler="addRepo" swapped="no"/>
+                    <signal name="clicked" handler="on_addRepo_clicked" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
