@@ -1,0 +1,134 @@
+# Example YAML configuration file for using the libcappy installer
+#
+# This file is part of libcappy.
+#
+# personal note: it feels like libcappy is just gonna turn into another anaconda/cloud-init now, this time with readable YAML configs instead of some weird kickstart file
+# NIH syndrome is real and Ultramarine is the example of it. At least libcappy actually kind of allows more customization than an average kickstart file
+
+install:
+  efi: true
+  # the chroot directory
+  chroot: /mnt/sysimage
+  # the device to partition the chroot into
+  device:
+    # partition type
+    path: /dev/sda
+
+    # partitions
+    partitions:
+      # EFI partition
+      - type: EFI
+        size: "512M"
+        label: "EFI"
+        path: sda1
+        mount:
+          # mount point
+          point: /boot/efi
+          # filesystem type
+          type: vfat
+          # mount options
+          options: "defaults umask=0077,shortname=winnt"
+      # root partition
+      - type: btrfs
+        size: "50%" # this will use the remaining space on the device
+        label: "root"
+        subvolume: '@'
+        path: sda2
+        mount:
+          # mount point
+          point: /
+          # filesystem type
+          type: btrfs
+          # mount options
+          options: "defaults subvol=@"
+          # subvolume can be set if you want to use btrfs
+          # subvolume: root
+      - type: btrfs
+        size: "100%"
+        label: "home"
+        subvolume: '@home'
+        path: sda3
+        delete: false # Don't delete this partition if already exists
+        mount:
+          # mount point
+          point: /home
+          # filesystem type
+          type: btrfs
+          # mount options
+          options: "defaults subvol=@home"
+          # subvolume can be set if you want to use btrfs
+          # subvolume: home
+
+  # Phase 1: Install the base system with these packages
+  phase1:
+    # the packages to install
+    packages:
+      - "@core"
+      - nano
+      - vim
+      - git
+      - fedora-release-basic
+    #extra-repos:
+    #  - https://dl.fedoraproject.org/pub/fedora/linux/releases/35/Everything/x86_64/os/
+
+  # Phase 2: Configuring the base system to be bootable, install a kernel
+  phase2:
+    bootloader: grub # can be either grub or systemd-boot
+    # Base kernel example
+    # kernel:
+    #   kernel-package: "kernel"
+    # In this example, we're using a custom kernel from a Copr project to show off the libcappy capabilities
+
+    # Custom kernel example
+    kernel:
+      kernel-package: kernel-xanmod
+      copr-project: "rmnscnce/kernel-xanmod"
+      # Weird limitation with the DNF Copr plugin, you have to specify the chroot here
+      chroot: "fedora-35-x86_64"
+      # if you want to use an external repo, specify it in phase 1
+  # Phase 3: Installing the rest of the system (X, Applications, etc)
+  phase3:
+    packages:
+    - "@xfce-desktop"
+    - "standard"
+    - lightdm
+    - dbus
+    - xfce4-terminal
+    # enable services
+    services:
+      - lightdm
+      - NetworkManager
+      - dbus
+
+    # Authentication
+    users:
+      - name: "dt"
+        password: "dt" # strong and complicated password
+        groups:
+          - wheel
+        uid: 1000
+        gid: 1000
+        home: /home/dt # defaults to /home/<username>
+        shell: /bin/bash
+        auth:
+          public-key:
+            - "insert-public-key-here"
+
+      - name: "alice"
+        password: "alice"
+        groups:
+          - wheel
+        uid: 1001
+        gid: 1001
+        home: /home/alice # defaults to /home/<username>
+        shell: /bin/bash
+        auth:
+          public-key:
+            - "insert-public-key-here"
+
+    postinstall-scripts:
+      - echo "Hello World!"
+      # insert your own postinstall script here
+    # optional: risiscript postinstall scripts
+    risiscript:
+      - "your-script.rscript"

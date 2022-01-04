@@ -5,8 +5,6 @@ Cappy is a to-be system configuration and management library and tools for Ultra
 
 It is designed to be a DNF-based alternative to OpenSUSE's YaST2, with a focus on simplicity and pure approachability.
 
-Currently, Cappy is in its early stages of development, and only exists as a DNF/Yum repository management frontend in GTK3.
-
 Cappy is planned to have the following features:
 
 * A graphical user interface for managing repositories and packages.
@@ -16,4 +14,4 @@ Cappy is planned to have the following features:
 * Integration with DNFStrap, a custom system installer and alternative to Anaconda.* (Potentially)
 * Support for RisiOS's RisiScript language.
 
-Currently, Cappy is written in Python 3.10, but it is planned to have a C and Go library in the future.
+For any requests, bug reports, or feature requests, please open an issue on this project's repository.
