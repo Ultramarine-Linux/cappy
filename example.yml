@@ -9,6 +9,8 @@ install:
   efi: true
   # the chroot directory
   chroot: /mnt/sysimage
+  # releasever
+  releasever: 35
   # the device to partition the chroot into
   device:
     # partition type
@@ -20,7 +22,8 @@ install:
       - type: EFI
         size: "512M"
         label: "EFI"
-        path: sda1
+        path: nvme0n1p1
+        delete: true
         mount:
           # mount point
           point: /boot/efi
@@ -30,34 +33,32 @@ install:
           options: "defaults umask=0077,shortname=winnt"
       # root partition
       - type: btrfs
-        size: "50%" # this will use the remaining space on the device
+        size: "100%" # this will use the remaining space on the device
         label: "root"
-        subvolume: '@'
-        path: sda2
+        path: sda
+        subvolumes:
+          # root subvolume
+          - subvolume: '@'
+            delete: true
+            mount:
+              # mount point
+              point: /
+              # filesystem type
+              type: btrfs
+              # mount options
+              options: "defaults,noatime,nodiratime,compress=lzo,subvol=@"
+      - type: ext4
+        size: "100%" # this will use the remaining space on the device
+        label: "root2"
+        path: sdb
+        delete: true
         mount:
           # mount point
           point: /
           # filesystem type
-          type: btrfs
+          type: ext4
           # mount options
-          options: "defaults subvol=@"
-          # subvolume can be set if you want to use btrfs
-          # subvolume: root
-      - type: btrfs
-        size: "100%"
-        label: "home"
-        subvolume: '@home'
-        path: sda3
-        delete: false # Don't delete this partition if already exists
-        mount:
-          # mount point
-          point: /home
-          # filesystem type
-          type: btrfs
-          # mount options
-          options: "defaults subvol=@home"
-          # subvolume can be set if you want to use btrfs
-          # subvolume: home
+          options: "defaults,noatime,nodiratime"
 
   # Phase 1: Install the base system with these packages
   phase1:
@@ -67,9 +68,9 @@ install:
       - nano
       - vim
       - git
-      - fedora-release-basic
-    #extra-repos:
-    #  - https://dl.fedoraproject.org/pub/fedora/linux/releases/35/Everything/x86_64/os/
+      - fedora-release
+    extra-repos:
+      - https://dl.fedoraproject.org/pub/fedora/linux/releases/35/Everything/x86_64/os/
 
   # Phase 2: Configuring the base system to be bootable, install a kernel
   phase2:
