@@ -291,14 +291,16 @@ class Bootstrap(object):
         # enter chroot
         # set up mounts first
         logger.info('Setting up mounts...') # This is the really risky part
-        os.system(f'mount --bind /dev {chroot}/dev')
-        os.system(f'mount --bind /proc {chroot}/proc')
-        os.system(f'mount --bind /sys {chroot}/sys')
+        os.makedirs(chroot + '/dev', exist_ok=True)
+        os.system(f'mount -t devtmpfs {chroot}/dev {chroot}/dev')
+        os.system(f'mount -t proc {chroot}/proc {chroot}/proc')
+        os.makedirs(chroot + '/proc', exist_ok=True)
+        os.system(f'mount --rbind /sys {chroot}/sys')
+        os.makedirs(chroot + '/sys', exist_ok=True)
         os.system(f"touch {chroot}/etc/resolv.conf")
-        os.system(f'mount --bind /etc/resolv.conf {chroot}/etc/resolv.conf')
+        os.system(f'mount --rbind /etc/resolv.conf {chroot}/etc/resolv.conf')
         # enter chroot
         os.chroot(chroot)
-        os.chdir('/')
         for command in commands:
             cmd = ' '.join(command)
             os.system(cmd)
@@ -318,13 +320,12 @@ class Bootstrap(object):
             subprocess.run(['bootctl', 'install'])
         # too dangerous to test for this right now
         # exit chroot
+        os.system(f'umount {chroot}/sys')
+        os.system(f'umount {chroot}/proc')
+        os.system(f'umount {chroot}/dev')
+        os.system(f'umount {chroot}/etc/resolv.conf')
         os.chdir('/')
         os.system('exit')
-        #os.system(f'umount {chroot}/dev')
-        #os.system(f'umount {chroot}/proc')
-        #os.system(f'umount {chroot}/sys')
-        #os.system(f'umount {chroot}/etc/resolv.conf')
-        #os.system('exit')
         return True
     def phase_3(self, chroot=None):
         """[Phase 3]
@@ -333,14 +334,16 @@ class Bootstrap(object):
         # and we're back to using the dnf module
         phase1 = self.config['install']['phase1']
         phase3 = self.config['install']['phase3']
-
+        if chroot == None:
+            chroot = self.config['install']['chroot']
+        chroot = os.path.abspath(chroot)
         # run the transaction
         command = ['dnf', 'install', '-y']
         for package in phase3['packages']:
             command.append(package)
         # now time to do some systemd stuff
-        # enter the chroot again
-        os.system(f'mount --bind /etc/resolv.conf {chroot}/etc/resolv.conf')
+        os.system(f'mount --rbind /etc/resolv.conf {chroot}/etc/resolv.conf')
+        # enter chroot
         os.chroot(chroot)
         for service in phase3['services']:
             subprocess.run(['systemctl', 'enable', service])
@@ -354,9 +357,10 @@ class Bootstrap(object):
         for user in phase3['users']:
             # The user schema as username, password, groups, home, uid, gid, and shell so we have to do all of this in one go
             # create the user
-            subprocess.run(['useradd', '-m', '-s', user['shell'], '-u', user['uid'], '-g', user['gid'], user['name']])
+            subprocess.run(['useradd', '-m', '-s', user['shell'], '-u', user['uid'],  user['name']])
             # set the password with the password provided
-            subprocess.run(['chpasswd'], input=f'{user["name"]}:{user["password"]}')
+            # the password is in plain text, so we have to use the passwd command
+            subprocess.run(['passwd', user['name']], input=user['password'].encode('utf-8'))
             # add the user to the groups
             for group in user['groups']:
                 subprocess.run(['usermod', '-a', '-G', group, user['name']])
@@ -383,10 +387,8 @@ class Bootstrap(object):
                 # something something risiscript here, blame pizzanerd for not releasing it yet
                 pass
 
-
         os.chdir('/')
         os.system('exit')
-        os.system(f'umount {chroot}/etc/resolv.conf')
 
     # finally, we're done
     # if you run all the phases, you'll get a fully installed system
