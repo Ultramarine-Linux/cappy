@@ -354,12 +354,12 @@ class Bootstrap(object):
         for user in phase3['users']:
             # The user schema as username, password, groups, home, uid, gid, and shell so we have to do all of this in one go
             # create the user
-            subprocess.run(['useradd', '-m', '-s', user['shell'], '-u', user['uid'], '-g', user['gid'], user['username']])
+            subprocess.run(['useradd', '-m', '-s', user['shell'], '-u', user['uid'], '-g', user['gid'], user['name']])
             # set the password with the password provided
             subprocess.run(['chpasswd'], input=f'{user["name"]}:{user["password"]}')
             # add the user to the groups
             for group in user['groups']:
-                subprocess.run(['usermod', '-a', '-G', group, user['username']])
+                subprocess.run(['usermod', '-a', '-G', group, user['name']])
             # set the home directory
             subprocess.run(['chown', '-R', f'{user["uid"]}:{user["gid"]}', user['home']])
             # set the shell
