@@ -82,7 +82,7 @@ install:
 
     # Custom kernel example
     kernel:
-      kernel-package: kernel-xanmod
+      kernel-package: kernel-xanmod-edge
       copr-project: "rmnscnce/kernel-xanmod"
       # Weird limitation with the DNF Copr plugin, you have to specify the chroot here
       chroot: "fedora-35-x86_64"
@@ -91,7 +91,7 @@ install:
   phase3:
     packages:
     - "@xfce-desktop"
-    - "standard"
+    - "@standard"
     - lightdm
     - dbus
     - xfce4-terminal

@@ -5,8 +5,10 @@
 
 from dnf.exceptions import TransactionCheckError
 from libcappy.packages import Packages
+from libcappy.repository import Copr
 import libcappy.logger as logger
 import dnf
+import dnf.cli
 import os
 import yaml
 import blivet
@@ -15,6 +17,7 @@ import json
 import logging
 import platform
 import subprocess
+
 
 class Bootstrap(object):
     """[summary]
@@ -222,6 +225,7 @@ class Bootstrap(object):
             logger.warning('Non-x86_64 platform detected. Bootloader setup for Phase 2 is not supported at this time. Please manually set up your bootloader configuration.')
         if chroot == None:
             chroot = self.config['install']['chroot']
+        chroot = os.path.abspath(chroot)
         # install the bootloader
         # check if the bootloader is in the phase2 list
         try:
@@ -255,8 +259,13 @@ class Bootstrap(object):
         # We're not using the dnf module anymore becuase we're working in a chroot
         try:
             phase2['kernel']['copr-project']
-            # chroot
-            commands.append(['dnf', 'copr', '-y', 'enable', phase2['kernel']['copr-project'], phase2['kernel']['chroot']])
+            # I'm stupid why don't we just use the copr function?
+            # I'm so dumb
+            copr = Copr()
+            repofile = copr.get_repo(phase2['kernel']['copr-project'], phase2['kernel']['chroot'])
+            # write the repo file to the chroot
+            with open(os.path.join(chroot, 'etc/yum.repos.d/libcappy-kernel.repo'), 'w') as f:
+                f.write(repofile)
         except KeyError:
             # shit solution but works. the try/pass of doom
             pass
@@ -264,38 +273,42 @@ class Bootstrap(object):
         commands.append(['dnf', 'install', '-y', phase2['kernel']['kernel-package']])
 
         # setup fstab
-        partitions = self.config['install']['devices']['partitions']
+        partitions = self.config['install']['device']['partitions']
         fstab_entries = []
         for partition in partitions:
             # add partitions to fstab
             # assume we already mounted the partitions
-            # get the uuid of the mountpoint
-            uuid = subprocess.run(['blkid', '-s', 'UUID', '-o', 'value', chroot + partition['mount']['point']], stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+            uuid = subprocess.run(['blkid', '-s', 'UUID','-o', 'value', '/dev/' + partition['path']], stdout=subprocess.PIPE).stdout.decode('utf-8').split(' ')[-1].strip()
             fstab_entries.append(f'UUID={uuid} {partition["mount"]["point"]} {partition["mount"]["type"]} {partition["mount"]["options"]} 0 0')
             # now write the fstab
             # create /etc/fstab if it doesn't exist
             if not os.path.exists(chroot + '/etc/fstab'):
-                os.makedirs(chroot + '/etc')
+                os.makedirs(chroot + '/etc', exist_ok=True)
             with open(chroot + '/etc/fstab', 'w') as f:
-                logger.debug(f"fstab sample: {'\n'.join(fstab_entries)} \n")
+                logger.debug(f"fstab sample: {fstab_entries}")
                 f.write('\n'.join(fstab_entries))
 
         # enter chroot
         # set up mounts first
+        logger.info('Setting up mounts...') # This is the really risky part
         os.system(f'mount --bind /dev {chroot}/dev')
         os.system(f'mount --bind /proc {chroot}/proc')
         os.system(f'mount --bind /sys {chroot}/sys')
+        os.system(f"touch {chroot}/etc/resolv.conf")
         os.system(f'mount --bind /etc/resolv.conf {chroot}/etc/resolv.conf')
         # enter chroot
         os.chroot(chroot)
+        os.chdir('/')
         for command in commands:
-            subprocess.run(command, shell=True)
+            cmd = ' '.join(command)
+            os.system(cmd)
         # set up the bootloader
+        
         if phase2['bootloader'] == 'grub':
             if self.config['install']['efi']:
                 # if it's an EFI system, assume it's going to be grub2
                 logger.info('EFI system selected and no bootloader specified, assuming grub.')
-                subprocess.run(['grub2-install', '--target=x86_64-efi', '/boot/efi'])
+                #subprocess.run(['grub2-install', '--target=x86_64-efi', '/boot/efi'])
             else:
                 # if it's not an EFI system, assume it wont have a bootloader
                 logger.warning('No bootloader specified. Will not install any bootloader.')
@@ -307,11 +320,11 @@ class Bootstrap(object):
         # exit chroot
         os.chdir('/')
         os.system('exit')
-        os.system(f'umount {chroot}/dev')
-        os.system(f'umount {chroot}/proc')
-        os.system(f'umount {chroot}/sys')
-        os.system(f'umount {chroot}/etc/resolv.conf')
-        os.system('exit')
+        #os.system(f'umount {chroot}/dev')
+        #os.system(f'umount {chroot}/proc')
+        #os.system(f'umount {chroot}/sys')
+        #os.system(f'umount {chroot}/etc/resolv.conf')
+        #os.system('exit')
         return True
     def phase_3(self, chroot=None):
         """[Phase 3]
@@ -320,68 +333,20 @@ class Bootstrap(object):
         # and we're back to using the dnf module
         phase1 = self.config['install']['phase1']
         phase3 = self.config['install']['phase3']
-        if chroot == None:
-            chroot = self.config['install']['chroot']
-        # fuck it, call DNF directly
-        ts = dnf.Base()
-        ts.read_all_repos()
-        # turn chroot into an absolute path
-        chroot = os.path.abspath(chroot)
-        ts.conf.installroot = chroot
-        ts.conf.releasever = self.config['install']['releasever']
-        ts.conf.substitutions['releasever'] = self.config['install']['releasever']
-        # add extra repos
-        # shit solution but hey, it kind of works
-        try:
-            phase1['extra_repos']
-        except KeyError:
-            phase1['extra_repos'] = [] # make it an empty list if it doesn't exist
-        if phase1['extra_repos']:
-            reponum = 0
-            for repo in phase1['extra_repos']:
-                repos = dnf.repo.Repo(f'libcappy-extra-repo-{reponum}')
-                repos.baseurl = repo
-                ts.repos.add(repos)
-                reponum += 1
-        ts.fill_sack(load_system_repo=False, load_available_repos=True)
-        for pkg in phase3['packages']:
-            if pkg.startswith('@'):
-                # expand the group
-                group = ts.comps.group_by_pattern(pkg[1:])
-                try:
-                    for p in group.mandatory_packages:
-                        ts.install(p.name)
-                    for p in group.default_packages:
-                        ts.install(p.name)
-                except dnf.exceptions.PackageNotFoundError:
-                    logger.error(f'Package {p.name} not found in the group {pkg[1:]}')
-            else:
-                # if it doesn't, it's a package
-                # install the package
-                try:
-                    ts.install(pkg)
-                except dnf.exceptions.PackageNotFoundError:
-                    logger.error(f'Package {pkg} not found')
 
         # run the transaction
-        ts.resolve()
-        ts.download_packages(ts.transaction.install_set)
-        try:
-            ts.do_transaction()
-        except TransactionCheckError as e:
-            logger.error(f'Transaction failed: {e}')
-            return False
+        command = ['dnf', 'install', '-y']
+        for package in phase3['packages']:
+            command.append(package)
         # now time to do some systemd stuff
         # enter the chroot again
-        os.system(f'mount --bind /dev {chroot}/dev')
-        os.system(f'mount --bind /proc {chroot}/proc')
-        os.system(f'mount --bind /sys {chroot}/sys')
         os.system(f'mount --bind /etc/resolv.conf {chroot}/etc/resolv.conf')
         os.chroot(chroot)
         for service in phase3['services']:
             subprocess.run(['systemctl', 'enable', service])
             subprocess.run(['systemctl', 'start', service])
         # exit the chroot
+        subprocess.run(command)
 
 
         # User configuration
@@ -421,9 +386,6 @@ class Bootstrap(object):
 
         os.chdir('/')
         os.system('exit')
-        os.system(f'umount {chroot}/dev')
-        os.system(f'umount {chroot}/proc')
-        os.system(f'umount {chroot}/sys')
         os.system(f'umount {chroot}/etc/resolv.conf')
 
     # finally, we're done
