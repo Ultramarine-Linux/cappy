@@ -32,21 +32,21 @@ install:
           # mount options
           options: "defaults umask=0077,shortname=winnt"
       # root partition
-      - type: btrfs
-        size: "100%" # this will use the remaining space on the device
-        label: "root"
-        path: sda
-        subvolumes:
-          # root subvolume
-          - subvolume: '@'
-            delete: true
-            mount:
-              # mount point
-              point: /
-              # filesystem type
-              type: btrfs
-              # mount options
-              options: "defaults,noatime,nodiratime,compress=lzo,subvol=@"
+      # - type: btrfs
+      #   size: "100%" # this will use the remaining space on the device
+      #   label: "root"
+      #   path: sda
+      #   subvolumes:
+      #     # root subvolume
+      #     - subvolume: '@'
+      #       delete: true
+      #       mount:
+      #         # mount point
+      #         point: /
+      #         # filesystem type
+      #         type: btrfs
+      #         # mount options
+      #         options: "defaults,noatime,nodiratime,compress=lzo,subvol=@"
       - type: ext4
         size: "100%" # this will use the remaining space on the device
         label: "root2"

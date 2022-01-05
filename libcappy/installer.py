@@ -13,6 +13,8 @@ import blivet
 from blivet.size import Size
 import json
 import logging
+import platform
+import subprocess
 
 class Bootstrap(object):
     """[summary]
@@ -209,3 +211,235 @@ class Bootstrap(object):
             logger.error(f'Transaction failed: {e}')
             return None
         return ts
+    def phase_2(self, chroot=None):
+        """[Phase 2]
+        Installs the base packages in a chroot along with extra packages provided in the settings
+        """
+        phase2 = self.config['install']['phase2']
+        phase1 = self.config['install']['phase1']
+        # check platform
+        if platform.machine() != 'x86_64':
+            logger.warning('Non-x86_64 platform detected. Bootloader setup for Phase 2 is not supported at this time. Please manually set up your bootloader configuration.')
+        if chroot == None:
+            chroot = self.config['install']['chroot']
+        # install the bootloader
+        # check if the bootloader is in the phase2 list
+        try:
+            phase2['bootloader']
+        except KeyError:
+            if self.config['install']['efi']:
+                # if it's an EFI system, assume it's going to be grub2
+                logger.info('EFI system selected and no bootloader specified, assuming grub.')
+                phase2['bootloader'] = 'grub'
+            else:
+                # if it's not an EFI system, assume it wont have a bootloader
+                logger.warning('No bootloader specified. Will not install any bootloader.')
+                phase2['bootloader'] = None
+        packages = []
+        if phase2['bootloader'] == 'grub':
+            logger.info('Installing grub...')
+            packages += ['grub2-pc', 'grub2-tools-extra', 'grub2-common', 'grub2-tools', 'grubby']
+            if self.config['install']['efi'] and platform.machine() == 'x86_64':
+                packages += ['grub2-efi-x64', 'grub2-efi-x64-modules', 'grub2-tools-efi', 'grub2-tools-extra', 'shim', ]
+
+        elif phase2['bootloader'] == 'systemd-boot':
+            logger.info('Installing systemd-boot... Please make sure your EFI partition is mounted to /efi.')
+            packages += ['systemd-boot-loaders', 'systemd-boot', 'systemd-boot-generator']
+
+        commands = [] # list of lists for subprocess.run
+
+        # commit the bootloader install first
+        spcpkg = ' '.join(packages)
+        commands.append(['dnf', 'install', '-y', spcpkg])
+
+        # We're not using the dnf module anymore becuase we're working in a chroot
+        try:
+            phase2['kernel']['copr-project']
+            # chroot
+            commands.append(['dnf', 'copr', '-y', 'enable', phase2['kernel']['copr-project'], phase2['kernel']['chroot']])
+        except KeyError:
+            # shit solution but works. the try/pass of doom
+            pass
+        # install the kernel
+        commands.append(['dnf', 'install', '-y', phase2['kernel']['kernel-package']])
+
+        # setup fstab
+        partitions = self.config['install']['devices']['partitions']
+        fstab_entries = []
+        for partition in partitions:
+            # add partitions to fstab
+            # assume we already mounted the partitions
+            # get the uuid of the mountpoint
+            uuid = subprocess.run(['blkid', '-s', 'UUID', '-o', 'value', chroot + partition['mount']['point']], stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+            fstab_entries.append(f'UUID={uuid} {partition["mount"]["point"]} {partition["mount"]["type"]} {partition["mount"]["options"]} 0 0')
+            # now write the fstab
+            # create /etc/fstab if it doesn't exist
+            if not os.path.exists(chroot + '/etc/fstab'):
+                os.makedirs(chroot + '/etc')
+            with open(chroot + '/etc/fstab', 'w') as f:
+                logger.debug(f"fstab sample: {'\n'.join(fstab_entries)} \n")
+                f.write('\n'.join(fstab_entries))
+
+        # enter chroot
+        # set up mounts first
+        os.system(f'mount --bind /dev {chroot}/dev')
+        os.system(f'mount --bind /proc {chroot}/proc')
+        os.system(f'mount --bind /sys {chroot}/sys')
+        os.system(f'mount --bind /etc/resolv.conf {chroot}/etc/resolv.conf')
+        # enter chroot
+        os.chroot(chroot)
+        for command in commands:
+            subprocess.run(command, shell=True)
+        # set up the bootloader
+        if phase2['bootloader'] == 'grub':
+            if self.config['install']['efi']:
+                # if it's an EFI system, assume it's going to be grub2
+                logger.info('EFI system selected and no bootloader specified, assuming grub.')
+                subprocess.run(['grub2-install', '--target=x86_64-efi', '/boot/efi'])
+            else:
+                # if it's not an EFI system, assume it wont have a bootloader
+                logger.warning('No bootloader specified. Will not install any bootloader.')
+                subprocess.run(['grub2-install', '/boot'])
+        elif phase2['bootloader'] == 'systemd-boot':
+            logger.info('Installing systemd-boot... Please make sure your EFI partition is mounted to /efi.')
+            subprocess.run(['bootctl', 'install'])
+        # too dangerous to test for this right now
+        # exit chroot
+        os.chdir('/')
+        os.system('exit')
+        os.system(f'umount {chroot}/dev')
+        os.system(f'umount {chroot}/proc')
+        os.system(f'umount {chroot}/sys')
+        os.system(f'umount {chroot}/etc/resolv.conf')
+        os.system('exit')
+        return True
+    def phase_3(self, chroot=None):
+        """[Phase 3]
+        Installs the rest of the system
+        """
+        # and we're back to using the dnf module
+        phase1 = self.config['install']['phase1']
+        phase3 = self.config['install']['phase3']
+        if chroot == None:
+            chroot = self.config['install']['chroot']
+        # fuck it, call DNF directly
+        ts = dnf.Base()
+        ts.read_all_repos()
+        # turn chroot into an absolute path
+        chroot = os.path.abspath(chroot)
+        ts.conf.installroot = chroot
+        ts.conf.releasever = self.config['install']['releasever']
+        ts.conf.substitutions['releasever'] = self.config['install']['releasever']
+        # add extra repos
+        # shit solution but hey, it kind of works
+        try:
+            phase1['extra_repos']
+        except KeyError:
+            phase1['extra_repos'] = [] # make it an empty list if it doesn't exist
+        if phase1['extra_repos']:
+            reponum = 0
+            for repo in phase1['extra_repos']:
+                repos = dnf.repo.Repo(f'libcappy-extra-repo-{reponum}')
+                repos.baseurl = repo
+                ts.repos.add(repos)
+                reponum += 1
+        ts.fill_sack(load_system_repo=False, load_available_repos=True)
+        for pkg in phase3['packages']:
+            if pkg.startswith('@'):
+                # expand the group
+                group = ts.comps.group_by_pattern(pkg[1:])
+                try:
+                    for p in group.mandatory_packages:
+                        ts.install(p.name)
+                    for p in group.default_packages:
+                        ts.install(p.name)
+                except dnf.exceptions.PackageNotFoundError:
+                    logger.error(f'Package {p.name} not found in the group {pkg[1:]}')
+            else:
+                # if it doesn't, it's a package
+                # install the package
+                try:
+                    ts.install(pkg)
+                except dnf.exceptions.PackageNotFoundError:
+                    logger.error(f'Package {pkg} not found')
+
+        # run the transaction
+        ts.resolve()
+        ts.download_packages(ts.transaction.install_set)
+        try:
+            ts.do_transaction()
+        except TransactionCheckError as e:
+            logger.error(f'Transaction failed: {e}')
+            return False
+        # now time to do some systemd stuff
+        # enter the chroot again
+        os.system(f'mount --bind /dev {chroot}/dev')
+        os.system(f'mount --bind /proc {chroot}/proc')
+        os.system(f'mount --bind /sys {chroot}/sys')
+        os.system(f'mount --bind /etc/resolv.conf {chroot}/etc/resolv.conf')
+        os.chroot(chroot)
+        for service in phase3['services']:
+            subprocess.run(['systemctl', 'enable', service])
+            subprocess.run(['systemctl', 'start', service])
+        # exit the chroot
+
+
+        # User configuration
+        # comments for copilot becuase I'm not going to literally type out everything manually, fuck GPL
+        for user in phase3['users']:
+            # The user schema as username, password, groups, home, uid, gid, and shell so we have to do all of this in one go
+            # create the user
+            subprocess.run(['useradd', '-m', '-s', user['shell'], '-u', user['uid'], '-g', user['gid'], user['username']])
+            # set the password with the password provided
+            subprocess.run(['chpasswd'], input=f'{user["name"]}:{user["password"]}')
+            # add the user to the groups
+            for group in user['groups']:
+                subprocess.run(['usermod', '-a', '-G', group, user['username']])
+            # set the home directory
+            subprocess.run(['chown', '-R', f'{user["uid"]}:{user["gid"]}', user['home']])
+            # set the shell
+            subprocess.run(['chsh', '-s', user['shell'], user['name']])
+            # if auth exists, set it
+            if 'auth' in user:
+                if 'public-key' in user['auth']:
+                    # this should always be a list of strings (public keys)
+                    for key in user['auth']['public-key']:
+                        subprocess.run(['mkdir', '-p', f'{user["home"]}/.ssh'])
+                        subprocess.run(['touch', f'{user["home"]}/.ssh/authorized_keys'])
+                        subprocess.run(['chmod', '700', f'{user["home"]}/.ssh'])
+                        subprocess.run(['chmod', '600', f'{user["home"]}/.ssh/authorized_keys'])
+                        subprocess.run(['echo', key, '>>', f'{user["home"]}/.ssh/authorized_keys'])
+
+            #postinstall tasks
+            if 'postinstall-scripts' in phase3:
+                for command in phase3['postinstall-scripts']:
+                    subprocess.run(['bash', '-c', command])
+            if 'risiscript' in phase3:
+                # something something risiscript here, blame pizzanerd for not releasing it yet
+                pass
+
+
+        os.chdir('/')
+        os.system('exit')
+        os.system(f'umount {chroot}/dev')
+        os.system(f'umount {chroot}/proc')
+        os.system(f'umount {chroot}/sys')
+        os.system(f'umount {chroot}/etc/resolv.conf')
+
+    # finally, we're done
+    # if you run all the phases, you'll get a fully installed system
+    # if you run phase 1, you'll get a minimal chroot. useful for mock and containers
+    # if you run phase 2, you'll get a bootable system
+    # if you run phase 3, you get everything else
+    # for partitioning, my head still hurts, but I'll get to it eventually. blivet is pain
+
+    # Maybe I'll also make a yaml generator for on-the-fly configuration when you're not using unattended install
+
+class ConfigGenerator:
+    def __init__(self, config):
+        self.config = config
+
+    def generate_config(self):
+        # this is where we'll generate the config
+        # for now, just return the config
+        return self.config
