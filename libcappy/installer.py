@@ -88,6 +88,7 @@ class Bootstrap(object):
 
                     # check if it's a btrfs partition
                     if partition['type'] == 'btrfs':
+                        logger.warning('Btrfs partitions are not supported at this time. If you\'d like to help us implement this feature, please submit a merge request at https://gitlab.ultramarine-linux.org/src/cappy/.')
                         subvolumes = partition['subvolumes']
                         # check if this btrfs partition is already created
                         # find btrfs volumes that has a parent of the partition path
