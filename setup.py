@@ -1,3 +1,4 @@
+from importlib.metadata import entry_points
 import os
 from setuptools import setup, find_packages
 
@@ -33,5 +34,10 @@ setup(
         'requests',
         'urllib3',
         'dnf-plugins-core',
-    ]
+    ],
+    entry_points = {
+        'console_scripts': [
+            'cappy = libcappy.cli.__main__:main',
+        ]
+    }
 )

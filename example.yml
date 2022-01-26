@@ -8,11 +8,15 @@
 install:
   installroot: chroot/
   # releasever
-  releasever: 36
+  
   packages:
     - '@buildsys-build'
     - 'nano'
     - 'dnf'
+  dnf_options:
+    install_weak_deps: false
+    #releasever: 36
+    user_agent: 'libcappy-libdnf/0.1'
   postinstall:
     # postinstall commands
     - 'echo "Hello World!"'

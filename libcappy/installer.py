@@ -39,7 +39,7 @@ class Installer:
         """
         self.config = Config(config).config
         self.chroot_path = self.config['installroot']
-        self.packages = Packages(installroot=self.chroot_path, opts={'releasever': self.config['releasever']})
+        self.packages = Packages(installroot=self.chroot_path, opts=self.config['dnf_options'])
         self.copr = Copr()
         self.logger = logger.logger
         self.logger.debug('Initializing Installer class')
