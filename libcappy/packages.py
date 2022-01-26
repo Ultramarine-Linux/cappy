@@ -9,7 +9,12 @@ class Packages:
     def __init__(self, installroot=None, opts=None):
         self.dnf = dnf.Base()
         self.dnf.read_all_repos()
-        self.chroot = os.path.abspath(installroot)
+        if installroot:
+            self.chroot = os.path.abspath(installroot)
+            self.dnf.conf.set_or_append_opt_value('installroot', self.chroot)
+            self.dnf.conf.set_or_append_opt_value('cachedir', os.path.join(self.chroot, 'var/cache/dnf'))
+        else:
+            self.chroot = os.path.abspath(os.sep)
         if opts:
             for option in opts:
                 try:
@@ -18,8 +23,6 @@ class Packages:
                     pass
         print(opts['releasever'])
         self.dnf.conf.releasever = opts['releasever']
-        self.dnf.conf.set_or_append_opt_value('installroot', self.chroot)
-        self.dnf.conf.set_or_append_opt_value('cachedir', os.path.join(self.chroot, 'var/cache/dnf'))
         self.dnf.setup_loggers()
         self.dnf.fill_sack()
     def install(self, pkgs: list):
