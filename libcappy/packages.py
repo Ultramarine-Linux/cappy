@@ -16,13 +16,13 @@ class Packages:
         else:
             self.chroot = os.path.abspath(os.sep)
         if opts:
+            if opts['releasever']:
+                self.dnf.conf.substitutions['releasever'] = opts['releasever']
             for option in opts:
                 try:
                     self.dnf.conf.set_or_append_opt_value(option, opts[option])
                 except:
                     pass
-        print(opts['releasever'])
-        self.dnf.conf.releasever = opts['releasever']
         self.dnf.setup_loggers()
         self.dnf.fill_sack()
     def install(self, pkgs: list):

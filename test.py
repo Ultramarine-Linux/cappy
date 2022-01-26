@@ -18,3 +18,9 @@ match args[0]:
         # write repos to file
         with open('repos.json', 'w') as f:
             f.write(repos)
+    case 'dnf':
+        # This is a test to see if we can install packages from a dnf repo, ON YOUR LOCAL SYSTEM
+        # Don't worry, it just installs powertop, which is a pretty harmless package. Might be useful if you wanted to know your power usage though.
+        import libcappy.packages as packages
+        pkgs = packages.Packages()
+        pkgs.install(['powertop'])
