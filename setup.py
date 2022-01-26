@@ -33,9 +33,5 @@ setup(
         'requests',
         'urllib3',
         'dnf-plugins-core',
-    ],
-    scripts=[
-        'scripts/dnfstrap',
-        'scripts/cappyctl',
     ]
 )

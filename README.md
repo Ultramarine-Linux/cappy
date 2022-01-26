@@ -11,7 +11,5 @@ Cappy is planned to have the following features:
 * CLI tools for simplifying package management.
 * Graphical Copr frontend, like an app store for community repositories.
 * Full-fledged library for system configuration, similar to the one in YaST.
-* Integration with DNFStrap, a custom system installer and alternative to Anaconda.* (Potentially)
-* Support for RisiOS's RisiScript language.
 
 For any requests, bug reports, or feature requests, please open an issue on this project's repository.

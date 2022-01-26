@@ -1,81 +1,64 @@
 import dnf
 import os
 import sys
-
+from libcappy.logger import logger
 
 class Packages:
     # class for managing packages via DNF
     # Simply macros to quickly call DNF functions without writing long transactions manually.
-    def __init__(self):
-        self.base = dnf.Base()
-        self.base.read_all_repos()
-        self.base.read_comps()
-        self.base.fill_sack(load_system_repo=False, load_available_repos=True)
-
-
-    def install(self,packages:list, opts:dict=None):
-
-        """
-        [summary]
-        Installs packages via DNF.
-
-        Arguments:
-        packages: list, packages to install
-        opts: dict, DNF options
-        """
-        #apply all the keys in opts to the base config
-        for key in opts:
-            self.base.conf.set_or_append_opt_value(key, opts[key])
-        # add the packages to the sack
-        self.base.fill_sack(load_system_repo=False, load_available_repos=True)
-        # install the packages
-        for package in packages:
-            self.base.install(package)
-        # commit the transaction
-        self.base.resolve()
-        self.base.do_transaction()
-
-    def remove(self,packages:list, opts:dict=None):
-
-            """
-            [summary]
-            Removes packages via DNF.
-
-            Arguments:
-            packages: list, packages to remove
-            opts: dict, DNF options
-            """
-            #apply all the keys in opts to the base config
-            for key in opts:
-                self.base.conf.set_or_append_opt_value(key, opts[key])
-            # add the packages to the sack
-            self.base.fill_sack(load_system_repo=False, load_available_repos=True, load_enabled_repos=True)
-            # remove the packages
-            for package in packages:
-                self.base.remove(package)
-            # commit the transaction
-            self.base.resolve()
-            self.base.do_transaction()
-    def update(self,packages:list=None, opts:dict=None):
-            """
-            [summary]
-            Updates packages via DNF.
-
-            Arguments:
-            packages: list, packages to update
-            opts: dict, DNF options
-            """
-            #apply all the keys in opts to the base config
-            for key in opts:
-                self.base.conf.set_or_append_opt_value(key, opts[key])
-            # add the packages to the sack
-            self.base.fill_sack(load_system_repo=False, load_available_repos=True, load_enabled_repos=True)
-            # update the packages
-            if packages == None:
-                self.base.upgrade_all()
-            else:
-                for package in packages:
-                    self.base.upgrade(package)
-            # commit the transaction
-            self.base.resolve()
-            self.base.do_transaction()
+    def __init__(self, installroot=None, opts=None):
+        self.dnf = dnf.Base()
+        self.dnf.read_all_repos()
+        self.chroot = os.path.abspath(installroot)
+        if opts:
+            for option in opts:
+                try:
+                    self.dnf.conf.set_or_append_opt_value(option, opts[option])
+                except:
+                    pass
+        print(opts['releasever'])
+        self.dnf.conf.releasever = opts['releasever']
+        self.dnf.conf.set_or_append_opt_value('installroot', self.chroot)
+        self.dnf.conf.set_or_append_opt_value('cachedir', os.path.join(self.chroot, 'var/cache/dnf'))
+        self.dnf.setup_loggers()
+        self.dnf.fill_sack()
+    def install(self, pkgs: list):
+        # install a list of packages
+        for pkg in pkgs:
+            try:
+                if pkg.startswith('@'):
+                    pkggroup = self.dnf.comps.group_by_pattern(pkg[1:])
+                    self.dnf.group_install(pkggroup._i.id, dnf.const.GROUP_PACKAGE_TYPES)
+                else:
+                    self.dnf.install(pkg)
+            except dnf.exceptions.PackageNotFoundError:
+                logger.warning('Package %s not found in repository' % pkg)
+        self.dnf.resolve()
+        self.dnf.download_packages(self.dnf.transaction.install_set)
+        self.dnf.do_transaction()
+    def remove(self, pkgs: list):
+        # remove a list of packages
+        for pkg in pkgs:
+            try:
+                self.dnf.remove(pkg)
+            except dnf.exceptions.PackageNotFoundError:
+                logger.warning('Package %s not found in repository' % pkg)
+        self.dnf.resolve()
+        self.dnf.download_packages(self.dnf.transaction.remove_set)
+        self.dnf.do_transaction()
+    def update(self):
+        # update all packages
+        self.dnf.upgrade_all()
+        self.dnf.resolve()
+        self.dnf.download_packages(self.dnf.transaction.install_set)
+        self.dnf.do_transaction()
+    def updatePkg(self, pkgs: list):
+        # update a list of packages
+        for pkg in pkgs:
+            try:
+                self.dnf.upgrade(pkg)
+            except dnf.exceptions.PackageNotFoundError:
+                logger.warning('Package %s not found in repository' % pkg)
+        self.dnf.resolve()
+        self.dnf.download_packages(self.dnf.transaction.install_set)
+        self.dnf.do_transaction()

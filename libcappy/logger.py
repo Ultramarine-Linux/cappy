@@ -12,12 +12,3 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-def info(msg):
-    logger.info(msg)
-def debug(msg):
-    logger.debug(msg)
-def error(msg):
-    logger.error(msg)
-def warning(msg):
-    logger.warning(msg)
-
