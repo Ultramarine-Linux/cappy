@@ -2,21 +2,30 @@
 #
 # This file is part of libcappy.
 #
-# personal note: it feels like libcappy is just gonna turn into another anaconda/cloud-init now, this time with readable YAML configs instead of some weird kickstart file
-# NIH syndrome is real and Ultramarine is the example of it. At least libcappy actually kind of allows more customization than an average kickstart file
-
 install:
   installroot: chroot/
   # releasever
-  
+  volumes:
+    - device: /dev/sda
+      mountpoint: /
+      filesystem: ext4
+    - uuid: f0f0f0f0-f0f0-f0f0-f0f0-f0f0f0f0f0f0
+      mountpoint: /boot
+      filesystem: ext4
+      dump: true
+      fsck: false
   packages:
     - '@buildsys-build'
     - 'nano'
     - 'dnf'
+  packages_exclude:
+    - 'fedora-release-common'
   dnf_options:
     install_weak_deps: false
-    #releasever: 36
+    releasever: rawhide
     user_agent: 'libcappy-libdnf/0.1'
+    exclude: 'fedora-release-common'
+
   postinstall:
     # postinstall commands
     - 'echo "Hello World!"'

@@ -1,7 +1,8 @@
 import requests
 import json
 import platform
-
+import logging
+logger = logging.getLogger(__name__)
 # Copr repo management for libcappy.
 # This is essentially a wrapper around the Copr API so that we can actually easily manage Copr repos.
 class Copr:

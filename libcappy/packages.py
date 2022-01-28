@@ -2,10 +2,11 @@ from click import progressbar
 import dnf
 import os
 import sys
-from libcappy.logger import logger
 import dnf.cli.progress
 import dnf.callback
 import dnf.cli.output
+import logging
+logger = logging.getLogger(__name__)
 class Packages:
     # class for managing packages via DNF
     # Simply macros to quickly call DNF functions without writing long transactions manually.
@@ -26,16 +27,13 @@ class Packages:
                     case 'arch':
                         self.conf.substitutions['arch'] = opts[opt]
                     case 'releasever':
-                        print(opts[opt])
-                        self.conf.substitutions['releasever'] = opts[opt]
+                        self.conf.substitutions['releasever'] = str(opts[opt])
                     case 'basearch':
                         self.conf.substitutions['basearch'] = opts[opt]
                     case _:
-                        print(f'setting {opt} to {opts[opt]}')
-                        # self.conf.{opt} = opts[opt]
-                        print(self.conf._set_value(opt, opts[opt]))
+                        self.conf._set_value(opt, opts[opt])
         # load the new configuration
-        self.dnf.read_all_repos()
+        self.dnf.read_all_repos(opts=self.conf.substitutions)
         #print(self.dnf._repos)
         #self.dnf.setup_loggers()
         logger.info('Loading Repositories...')
@@ -43,7 +41,11 @@ class Packages:
     def install(self, pkgs: list):
         # install a list of packages
         self.dnf.install_specs(pkgs)
-        self.dnf.resolve()
+        try:
+            self.dnf.resolve(allow_erasing=True)
+        except dnf.exceptions.DepsolveError as e:
+            logger.error(f'Transaction resolution failed: {e}')
+            return False
         self.dnf.download_packages(self.dnf.transaction.install_set, self.downprogress)
         # Yes, we're stealing the progress bar from dnf's CLI.
         self.dnf.do_transaction(self.transdisplay)
