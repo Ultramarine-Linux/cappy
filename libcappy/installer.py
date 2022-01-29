@@ -3,6 +3,7 @@
 # Basically DNFStrap, but now in Python.
 # Copyright (C) 2022 Cappy Ishihara and contributors under the MIT License.
 
+import shutil
 from dnf.exceptions import TransactionCheckError
 from libcappy.packages import Packages
 from libcappy.repository import Copr
@@ -13,7 +14,7 @@ import yaml
 import json
 import platform
 import subprocess
-
+import importlib.resources
 class Config(object):
     # the class for reading and writing configuration files
     def __init__(self, configfile):
@@ -120,6 +121,7 @@ class Installer:
             self.chroot_path,
             '/bin/bash',
             '-c',
+            '--capability=CAP_SYS_ADMIN,CAP_SYS_RAWIO',
             command
         ])
 
@@ -132,6 +134,10 @@ class Installer:
         self.logger.debug('Created chroot directory')
         self.logger.info('Initializing chroot directory')
         self.packages.install(self.config['packages'])
+        # create /.autorelabel
+        with open(os.path.join(self.chroot_path, '.autorelabel'), 'w') as f:
+            f.write('1')
+        self.logger.info('Installed packages')
     def postInstall(self):
         """postInstall
         Runs the post-installation commands.
@@ -167,3 +173,19 @@ class Installer:
                     entry['fsck'] = '0'
                 f.write(f'{entry["fsck"]}\n')
         self.logger.debug('Wrote fstab')
+    def grubGen(self, root: str, boot: str=None):
+        """[summary]
+        Configures GRUB for the chroot.
+        """
+        self.logger.info('Configuring GRUB')
+        # use importlib.resources to load templates/grub.cfg
+        with importlib.resources.path('libcappy', 'templates/grub.cfg') as template:
+            with open(os.path.join(self.chroot_path, 'boot/efi/EFI/fedora/grub.cfg'), 'w') as f:
+                # replace @UUID@ with the UUID of the root partition then write to file
+                f.write(template.read().replace('@UUID@', root))
+
+        # copy boot/efi/EFI/fedora/grub.cfg to boot/efi/EFI/BOOT/grub.cfg
+        shutil.copy(os.path.join(self.chroot_path, 'boot/efi/EFI/fedora/grub.cfg'), os.path.join(self.chroot_path, 'boot/efi/EFI/BOOT/grub.cfg'))
+        self.nspawn(f'grubby --remove-args="rd.live.image" --update-kernel ALL')
+        self.nspawn(f'grubby --remove-args="root" --update-kernel=ALL --copy-default')
+        self.nspawn(f'grubby --add-args="root={root}" --update-kernel=ALL --copy-default')

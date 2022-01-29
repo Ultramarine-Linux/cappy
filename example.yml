@@ -15,13 +15,18 @@ install:
       dump: true
       fsck: false
   packages:
-    - '@buildsys-build'
+    - '@core'
     - 'nano'
     - 'dnf'
+    - 'kernel'
+    - 'grub2-efi-x64'
+    - 'shim'
+    - 'grub2-tools-efi'
+    - 'grub2-pc'
   packages_exclude:
     - 'fedora-release-common'
   dnf_options:
-    install_weak_deps: false
+    install_weak_deps: true
     releasever: rawhide
     user_agent: 'libcappy-libdnf/0.1'
     exclude: 'fedora-release-common'
@@ -29,5 +34,3 @@ install:
   postinstall:
     # postinstall commands
     - 'echo "Hello World!"'
-    - 'dnf'
-    - 'ping google.com'
