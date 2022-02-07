@@ -5,7 +5,7 @@ include:
 
 
 before_script:
-  - dnf install -y tox python3-tox-current-env python3-dnf python3-libdnf python3-dnf-plugins-core python3-dnf-plugins-extras
+  - dnf install -y tox python3-tox-current-env python3-dnf python3-libdnf python3-dnf-plugins-core
 
 installer:
   stage: test
