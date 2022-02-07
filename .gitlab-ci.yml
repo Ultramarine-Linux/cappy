@@ -1,0 +1,28 @@
+image: fedora:35
+
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
+
+before_script:
+  - dnf install -y tox python3-tox-current-env python3-dnf python3-libdnf python3-dnf-plugins-core python3-dnf-plugins-extras
+
+installer:
+  stage: test
+  script:
+  - tox --current-env --recreate -e installer
+
+pkg_install:
+  stage: test
+  script:
+  - tox --current-env --recreate -e pkg
+
+repo_fetcher:
+  stage: test
+  script:
+  - tox --current-env --recreate -e repo
+
+lint:
+  stage: test
+  script:
+  - tox --current-env --recreate -e linter

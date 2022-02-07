@@ -1,6 +1,8 @@
 # Temporary files
 *~
 __pycache__
-
+*.egg-info
 build/
 chroot/
+.tox/
+.pytest_cache/

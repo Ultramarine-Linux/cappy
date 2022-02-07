@@ -1,0 +1,36 @@
+# Example YAML configuration file for using the libcappy installer
+#
+# This file is part of libcappy.
+#
+install:
+  installroot: chroot/
+  # releasever
+  volumes:
+    - device: /dev/sda
+      mountpoint: /
+      filesystem: ext4
+    - uuid: f0f0f0f0-f0f0-f0f0-f0f0-f0f0f0f0f0f0
+      mountpoint: /boot
+      filesystem: ext4
+      dump: true
+      fsck: false
+  packages:
+    - '@core'
+    - 'nano'
+    - 'dnf'
+    - 'kernel'
+    - 'grub2-efi-x64'
+    - 'shim'
+    - 'grub2-tools-efi'
+    - 'grub2-pc'
+  packages_exclude:
+    - 'fedora-release-common'
+  dnf_options:
+    install_weak_deps: true
+    releasever: rawhide
+    user_agent: 'libcappy-libdnf/0.1'
+    exclude: 'fedora-release-common'
+
+  postinstall:
+    # postinstall commands
+    - 'echo "Hello World!"'

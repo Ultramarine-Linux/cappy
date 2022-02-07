@@ -1,0 +1,2932 @@
+[
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/starter-kit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55826,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-starter-kit-525"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55826"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55826"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55826/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55826"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55825,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-631"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55825"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55825"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55825/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55825"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55824,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-631-stg"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55824"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55824"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55824/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55824"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55823,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-158"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55823"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55823"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55823/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55823"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55822,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-158-stg"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55822"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55822"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55822/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55822"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Logisim is an educational tool for designing and simulating digital logic circuits. With its simple toolbar interface and simulation of circuits as you build them, it is simple enough to facilitate learning the most basic concepts related to logic circuits. With the capacity to build larger circuits from smaller subcircuits, and to draw bundles of wires with a single mouse drag, Logisim can be used (and is used) to design and simulate entire CPUs for educational purposes.\r\n\r\nNote: Further Logisim development is suspended indefinitely. (11 Oct 2014)",
+            "disable_createrepo": false,
+            "homepage": "http://www.cburch.com/logisim/",
+            "instructions": "```\r\nsudo dnf copr enable stenstorp/logisim\r\nsudo dnf install logisim\r\n```",
+            "build_enable_net": false,
+            "id": 55821,
+            "contact": "stenstorpmc@gmail.com",
+            "owner": "stenstorp",
+            "repos": [],
+            "name": "logisim"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55821"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55821"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55821/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55821"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55820,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22433"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55820"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55820"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55820/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55820"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55819,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-16929"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55819"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55819"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55819/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55819"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/evverx/elfutils.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55818,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "evverx-elfutils-63"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55818"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55818"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55818/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55818"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/ondrejbudai/osbuild-composer.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55817,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "ondrejbudai-osbuild-composer-59"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55817"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55817"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55817/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55817"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Testinig Version of v2rayA.",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "```bash\r\nsudo dnf copr enable zhullyb/v2rayA-nightly\r\nsudo dnf install v2raya-master\r\n```",
+            "build_enable_net": true,
+            "id": 55816,
+            "contact": null,
+            "owner": "zhullyb",
+            "repos": [],
+            "name": "v2rayA-nightly"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55816"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55816"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55816/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55816"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": "https://github.com/taisei-project/taisei/",
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55814,
+            "contact": "https://pagure.io/taisei-rpm/issues",
+            "owner": "sentry",
+            "repos": [],
+            "name": "taisei"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55814"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55814"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55814/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55814"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "mbsync imap sync tools",
+            "disable_createrepo": false,
+            "homepage": "http://isync.sourceforge.net/",
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55813,
+            "contact": "steve@hassard.net",
+            "owner": "shassard",
+            "repos": [],
+            "name": "isync"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55813"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55813"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55813/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55813"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "mu and mu4e",
+            "disable_createrepo": false,
+            "homepage": "http://www.djcbsoftware.nl/code/mu/index.html",
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55812,
+            "contact": "steve@hassard.net",
+            "owner": "shassard",
+            "repos": [],
+            "name": "maildir-utils"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55812"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55812"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55812/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55812"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55810,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-dnf-pr1812"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55810"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55810"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55810/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55810"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "**Input Remapper**\r\n\r\nFormerly Key Mapper\r\n\r\nAn easy to use tool to change the mapping of your input device buttons.\r\nSupports mice, keyboards, gamepads, X11, Wayland, combined buttons and programmable macros.\r\nAllows mapping non-keyboard events (click, joystick, wheel) to keys of keyboard devices. ",
+            "disable_createrepo": false,
+            "homepage": "https://github.com/sezanzeb/input-remapper/",
+            "instructions": "    dnf copr enable sunwire/input-remapper\r\n    dnf install python3-input-remapper\r\n    systemctl start input-remapper.service\r\n",
+            "build_enable_net": false,
+            "id": 55809,
+            "contact": null,
+            "owner": "sunwire",
+            "repos": [],
+            "name": "input-remapper"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55809"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55809"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55809/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55809"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55808,
+            "contact": null,
+            "owner": "fale",
+            "repos": [],
+            "name": "pdfcpu"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55808"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55808"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55808/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55808"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55807,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-16928"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55807"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55807"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55807/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55807"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55806,
+            "contact": null,
+            "owner": "lbalhar",
+            "repos": [],
+            "name": "python-virtualenv"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55806"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55806"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55806/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55806"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "An experimental monspace Bengali font for special applications ",
+            "disable_createrepo": false,
+            "homepage": "https://github.com/mitradranirban/fonts-fbf-beng ",
+            "instructions": "To know details visit our homepage",
+            "build_enable_net": false,
+            "id": 55805,
+            "contact": null,
+            "owner": "mitradranirban",
+            "repos": [],
+            "name": "fbf-mitra-fonts"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55805"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55805"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55805/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55805"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55804,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-630"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55804"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55804"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55804/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55804"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55803,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-630-stg"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55803"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55803"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55803/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55803"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/flexmock/flexmock.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55802,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "flexmock-flexmock-127"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55802"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55802"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55802/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55802"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Packages I need for my laptop",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "Probably don't use this lol",
+            "build_enable_net": false,
+            "id": 55801,
+            "contact": "kj@kjtsanaktsidis.id.au",
+            "owner": "kjtsanaktsidis",
+            "repos": [],
+            "name": "kjs-packages"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55801"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55801"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55801/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55801"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/flexmock/flexmock.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55800,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "flexmock-flexmock-126"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55800"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55800"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55800/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55800"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/httpie/httpie.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55799,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [
+                "https://kojipkgs.fedoraproject.org/repos/f$releasever-build/latest/$basearch/"
+            ],
+            "name": "httpie-httpie-1294"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55799"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55799"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55799/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55799"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/bus1/dbus-broker.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55798,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "bus1-dbus-broker-279"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55798"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55798"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55798/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55798"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55797,
+            "contact": null,
+            "owner": "scorreia",
+            "repos": [],
+            "name": "epel9"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55797"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55797"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55797/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55797"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55796,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22430"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55796"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55796"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55796/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55796"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/dracutdevs/dracut.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55795,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "dracutdevs-dracut-1655"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55795"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55795"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55795/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55795"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55794,
+            "contact": null,
+            "owner": "sergiomb",
+            "repos": [],
+            "name": "clamav_aarch64"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55794"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55794"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55794/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55794"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/nmstate/nmstate.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55793,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "nmstate-nmstate-1799"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55793"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55793"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55793/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55793"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "[podma-tui](https://github.com/containers/podman-tui) is a Terminal User Interface for Podman",
+            "disable_createrepo": false,
+            "homepage": "https://github.com/containers/podman-tui",
+            "instructions": "- #> sudo dnf copr enable navidys/podman-tui\r\n- #> sudo dnf install podman-tui\r\n- #> podman-tui",
+            "build_enable_net": false,
+            "id": 55792,
+            "contact": "n.yaghoobi.s@gmail.com",
+            "owner": "navidys",
+            "repos": [],
+            "name": "podman-tui"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55792"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55792"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55792/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55792"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit-machines.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55791,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-machines-557"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55791"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55791"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55791/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55791"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit-podman.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55790,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-podman-909"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55790"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55790"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55790/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55790"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55789,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-629"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55789"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55789"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55789/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55789"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55788,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-629-stg"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55788"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55788"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55788/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55788"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55787,
+            "contact": null,
+            "owner": "matthewdva",
+            "repos": [],
+            "name": "sshguard"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55787"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55787"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55787/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55787"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "This is Fedora's glibc built with clone3 disabled because it breaks electron applications, including discord and the steam beta.\r\n\r\nSee here for more details:\r\n\r\nhttps://stackoverflow.com/questions/70061536/problem-with-launching-discord-fedora-35\r\n\r\nhttps://github.com/ValveSoftware/steam-for-linux/issues/8373#issuecomment-1030509625\r\n\r\nWithout this change you need to add the --no-sandbox option to discord or --no-cef-sandbox to steam (only when running the steam beta)",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": true,
+            "id": 55786,
+            "contact": null,
+            "owner": "gloriouseggroll",
+            "repos": [],
+            "name": "glibc"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55786"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55786"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55786/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55786"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osandov/drgn.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55785,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osandov-drgn-154"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55785"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55785"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55785/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55785"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55784,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22426"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55784"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55784"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55784/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55784"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Automatic build of NetworkManager's git nm-1-36 branch",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55781,
+            "contact": null,
+            "owner": "networkmanager",
+            "repos": [],
+            "name": "NetworkManager-1.36"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55781"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55781"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55781/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55781"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Automatic rebuild of NetworkManager's git nm-1-36 branch with DEBUG options enabled",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55780,
+            "contact": null,
+            "owner": "networkmanager",
+            "repos": [],
+            "name": "NetworkManager-1.36-debug"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55780"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55780"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55780/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55780"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/psss/fmf.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55779,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "psss-fmf-151"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55779"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55779"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55779/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55779"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55778,
+            "contact": null,
+            "owner": "music",
+            "repos": [],
+            "name": "hatchling"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55778"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55778"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55778/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55778"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/sosreport/sos.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55777,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "sosreport-sos-2842"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55777"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55777"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55777/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55777"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/sosreport/sos.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55776,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "sosreport-sos-2739"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55776"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55776"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55776/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55776"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "ldaptor is based on twisted and (since version 20.1.x) free from python2 requirements.\r\nI am not one of the maintainers of ldaptor. But need / used it for an LDAP proxy service and ... pip install --user is not the solution and running a container not \"the way\".",
+            "disable_createrepo": false,
+            "homepage": "https://ldaptor.readthedocs.io/en/latest/NEWS.html",
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55775,
+            "contact": null,
+            "owner": "jeanm",
+            "repos": [],
+            "name": "python-ldaptor"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55775"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55775"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55775/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55775"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55774,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22423"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55774"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55774"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55774/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55774"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55773,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22422"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55773"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55773"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55773/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55773"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/dracutdevs/dracut.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55772,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "dracutdevs-dracut-1702"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55772"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55772"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55772/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55772"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/rhinstaller/anaconda.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55771,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [
+                "https://fedorapeople.org/groups/anaconda/repos/anaconda_fixup_repo/"
+            ],
+            "name": "rhinstaller-anaconda-3827"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55771"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55771"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55771/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55771"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/redhat-plumbers/systemd-rhel9.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55770,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "redhat-plumbers-systemd-rhel9-68"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55770"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55770"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55770/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55770"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild-composer.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55769,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-composer-2262"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55769"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55769"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55769/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55769"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55768,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-962"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55768"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55768"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55768/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55768"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/rhinstaller/anaconda.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55765,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [
+                "https://fedorapeople.org/groups/anaconda/repos/anaconda_fixup_repo/"
+            ],
+            "name": "rhinstaller-anaconda-3826"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55765"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55765"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55765/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55765"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55764,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-961"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55764"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55764"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55764/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55764"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55763,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22421"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55763"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55763"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55763/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55763"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55762,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22420"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55762"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55762"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55762/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55762"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": " Tool for branching Fedora packages for EPEL ",
+            "disable_createrepo": false,
+            "homepage": "https://pagure.io/epel/ebranch",
+            "instructions": "sudo dnf install ebranch",
+            "build_enable_net": false,
+            "id": 55761,
+            "contact": "https://pagure.io/epel/ebranch/issues",
+            "owner": "salimma",
+            "repos": [],
+            "name": "ebranch"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55761"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55761"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55761/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55761"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55760,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-628"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55760"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55760"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55760/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55760"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55759,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-628-stg"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55759"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55759"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55759/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55759"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55758,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22419"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55758"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55758"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55758/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55758"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/avocado-framework/avocado.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55757,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "avocado-framework-avocado-5256"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55757"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55757"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55757/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55757"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild-composer.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55756,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-composer-2261"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55756"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55756"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55756/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55756"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/hello-world.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55755,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-hello-world-627-stg"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55755"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55755"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55755/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55755"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild-composer.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55754,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-composer-2260"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55754"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55754"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55754/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55754"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/redhat-performance/tuned.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55753,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "redhat-performance-tuned-411"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55753"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55753"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55753/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55753"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit-machines.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55752,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-machines-556"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55752"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55752"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55752/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55752"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/OpenSCAP/openscap-report.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55751,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "OpenSCAP-openscap-report-50"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55751"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55751"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55751/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55751"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/majamassarini/teamcity-messages.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55750,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "majamassarini-teamcity-messages-master"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55750"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55750"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55750/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55750"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/rhinstaller/anaconda.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55749,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [
+                "https://fedorapeople.org/groups/anaconda/repos/anaconda_fixup_repo/"
+            ],
+            "name": "rhinstaller-anaconda-3825"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55749"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55749"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55749/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55749"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/OpenSCAP/openscap-report.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55748,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "OpenSCAP-openscap-report-48"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55748"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55748"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55748/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55748"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild-composer.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55747,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-composer-2259"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55747"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55747"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55747/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55747"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/OpenSCAP/openscap-report.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55746,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "OpenSCAP-openscap-report-47"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55746"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55746"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55746/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55746"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/OpenSCAP/openscap-report.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55745,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "OpenSCAP-openscap-report-41"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55745"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55745"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55745/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55745"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/httpie/httpie.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55744,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [
+                "https://kojipkgs.fedoraproject.org/repos/f$releasever-build/latest/$basearch/"
+            ],
+            "name": "httpie-httpie-1293"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55744"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55744"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55744/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55744"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/rhinstaller/anaconda.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55743,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [
+                "https://fedorapeople.org/groups/anaconda/repos/anaconda_fixup_repo/"
+            ],
+            "name": "rhinstaller-anaconda-3824"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55743"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55743"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55743/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55743"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55742,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-16926"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55742"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55742"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55742/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55742"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55741,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22417"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55741"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55741"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55741/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55741"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild-composer.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55740,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-composer-2258"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55740"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55740"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55740/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55740"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Cross-platform, fast, feature full, GPU based terminal emulator.\r\n\r\n[Upstream](https://github.com/kovidgoyal/kitty/releases)",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55739,
+            "contact": null,
+            "owner": "claudi",
+            "repos": [],
+            "name": "kitty"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55739"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55739"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55739/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55739"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/avocado-framework/avocado.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55738,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "avocado-framework-avocado-5255"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55738"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55738"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55738/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55738"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55737,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-16925"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55737"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55737"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55737/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55737"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55736,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-dnf-plugins-core-pr450"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55736"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55736"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55736/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55736"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": true,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55735,
+            "contact": null,
+            "owner": "@authselect",
+            "repos": [],
+            "name": "test"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55735"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55735"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55735/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55735"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/packit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55734,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-packit-1474-stg"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55734"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55734"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55734/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55734"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/packit/packit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55733,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "packit-packit-1474"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55733"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55733"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55733/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55733"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55732,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-libdnf5-pr1438-clang"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55732"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55732"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55732/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55732"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55731,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-libdnf-pr1438"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55731"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55731"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55731/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55731"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55730,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-libdnf5-pr1438"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55730"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55730"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55730/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55730"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55729,
+            "contact": null,
+            "owner": "jhu",
+            "repos": [],
+            "name": "nvidia-vaapi-driver"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55729"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55729"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55729/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55729"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/osbuild/osbuild-composer.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55728,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "osbuild-osbuild-composer-2256"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55728"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55728"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55728/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55728"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55727,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-ci-dnf-stack-pr1068"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55727"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55727"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55727/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55727"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55726,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-16924"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55726"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55726"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55726/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55726"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55725,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-libdnf5-pr1437"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55725"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55725"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55725/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55725"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55724,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-libdnf-pr1437"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55724"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55724"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55724/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55724"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "",
+            "build_enable_net": false,
+            "id": 55723,
+            "contact": null,
+            "owner": "rpmsoftwaremanagement",
+            "repos": [
+                "copr://rpmsoftwaremanagement/dnf-nightly"
+            ],
+            "name": "CI-libdnf5-pr1437-clang"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55723"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55723"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55723/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55723"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/systemd/systemd.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55722,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "systemd-systemd-22416"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55722"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55722"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55722/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55722"
+            }
+        }
+    },
+    {
+        "project": {
+            "is_a_group_project": false,
+            "description": "Continuous builds initiated by packit service.\nFor more info check out https://packit.dev/",
+            "disable_createrepo": false,
+            "homepage": null,
+            "instructions": "You can check out the upstream project https://github.com/cockpit-project/cockpit.git to find out how to consume these builds. This copr project is created and handled by the packit project (https://packit.dev/).",
+            "build_enable_net": true,
+            "id": 55721,
+            "contact": "https://github.com/packit/packit/issues",
+            "owner": "packit",
+            "repos": [],
+            "name": "cockpit-project-cockpit-16923"
+        },
+        "_links": {
+            "self": {
+                "href": "/api_2/projects/55721"
+            },
+            "builds": {
+                "href": "/api_2/builds?project_id=55721"
+            },
+            "chroots": {
+                "href": "/api_2/projects/55721/chroots"
+            },
+            "build_tasks": {
+                "href": "/api_2/build_tasks?project_id=55721"
+            }
+        }
+    }
+]
