@@ -5,7 +5,10 @@ include:
 
 
 before_script:
-  - dnf install -y tox python3-tox-current-env python3-dnf python3-libdnf python3-dnf-plugins-core
+  - |
+    if [ -f /usr/bin/dnf ]; then
+    dnf install -y tox python3-tox-current-env python3-dnf python3-libdnf python3-dnf-plugins-core
+    fi
 
 installer:
   stage: test
