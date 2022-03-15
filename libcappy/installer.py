@@ -3,10 +3,13 @@
 # Basically DNFStrap, but now in Python.
 # Copyright (C) 2022 Cappy Ishihara and contributors under the MIT License.
 
+from dataclasses import field
+import re
 import shutil
+from typing import Any, Tuple
 from dnf.exceptions import TransactionCheckError
-from libcappy.packages import Packages
-from libcappy.repository import Copr
+# from packages import Packages
+# from repository import Copr
 import logging
 logger = logging.getLogger(__name__)
 import os
@@ -145,7 +148,7 @@ class Installer:
         self.logger.info('Running post-installation commands')
         for command in self.config['postinstall']:
             self.nspawn(command)
-    def fstab(self, table: dict):
+    def fstab(self, table: list[dict[str, str|bool]]):
         """fstab
         Generates a Filesystem Table (fstab)
 
@@ -189,3 +192,86 @@ class Installer:
         self.nspawn(f'grubby --remove-args="rd.live.image" --update-kernel ALL')
         self.nspawn(f'grubby --remove-args="root" --update-kernel=ALL --copy-default')
         self.nspawn(f'grubby --add-args="root={root}" --update-kernel=ALL --copy-default')
+    def mount(self, table: list[dict[str, str|bool]]):
+        for entry in table:
+            self.nspawn(f"mount {entry['device']} {entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
+
+
+class Wizard:
+    def lsblk(self):
+        parts: list[dict[str, str]] = []
+        lines = subprocess.getoutput("lsblk -l").splitlines()
+        lines.pop(0)
+        for l in lines:
+            if l[0] == ' ':
+                parts.append(parts[-1].copy())
+                parts[-1]['MOUNTPOINTS'] = l.strip()
+                continue
+            ls = l.split()
+            ls.append('') # in case no mp
+            parts.append({
+                'NAME': ls[0],
+                'SIZE': ls[3],
+                'TYPE': ls[5],
+                'MOUNTPOINTS': ls[6]  # mountpoint
+            })
+
+        lines = subprocess.getoutput("lsblk -lf").splitlines()
+        fields = re.findall(r'\S+\s*', lines.pop(0), re.RegexFlag.M)
+        i: int = 0
+        for l in lines:
+            left = 0
+            cur: dict[str, str] = {}
+            for field in fields:
+                length = len(field)
+                value = l[left:left+length]
+                left += length
+                v = value.strip()
+                # first field
+                if (f := field.rstrip().upper()) == 'NAME':
+                    if not v:  # v == ''
+                        assert ' ' not in (mp := l.strip())  # make sure it's only 1 col
+                        p = parts[i].copy()
+                        p['MOUNTPOINTS'] = mp
+                        found = False
+                        for n, part in enumerate(parts):
+                            if part['MOUNTPOINTS'] == mp:
+                                found = True
+                                break
+                        if found:
+                            parts[n].update(p)
+                        break  # just a thing with a different mountpoint
+                    for n, part in enumerate(parts):
+                        if part['NAME'] == v:
+                            cur = part
+                            i = n
+                            break
+
+                assert any(cur)
+                if not v: continue
+                cur[f] = v
+            if any(cur):
+                parts[i] = cur
+        return parts
+
+    @staticmethod
+    def uniform_dict(dicts: list[dict[str, Any]], dummy='') -> Tuple[set[str], list[dict[str, Any]]]:
+        fields: set[str] = [f for d in dicts for f in d]
+        newDicts: list[dict[str, Any]] = []
+        default = {k: dummy for k in fields}
+        for d in dicts:
+            new = default.copy()
+            new.update(d)
+            newDicts.append(new)
+        return fields, newDicts
+
+    def strip_lsblk(self, parts: list[dict[str, str]]):
+        # we don't allow users to select their installation media as the target
+        return [d for d in parts if d['MOUNTPOINTS'] not in ['/', '/boot/efi', '/boot']]
+
+    def localectl(self):
+        return subprocess.getoutput("localectl list-locales --no-pager").splitlines()
+
+    def locales(self):
+        #! fix when build
+        return subprocess.getoutput(os.path.join(os.path.dirname(__file__), 'parse_locales/target/release/parse_locales'))
