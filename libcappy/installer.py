@@ -8,8 +8,8 @@ import re
 import shutil
 from typing import Any, Tuple
 from dnf.exceptions import TransactionCheckError
-# from packages import Packages
-# from repository import Copr
+from libcappy.packages import Packages
+from libcappy.repository import Copr
 import logging
 logger = logging.getLogger(__name__)
 import os
@@ -274,4 +274,4 @@ class Wizard:
 
     def locales(self):
         #! fix when build
-        return subprocess.getoutput(os.path.join(os.path.dirname(__file__), 'parse_locales/target/release/parse_locales'))
+        return subprocess.getoutput(os.path.join(os.path.dirname(__file__), 'parse_locales/target/release/cappy_parse_locales'))
