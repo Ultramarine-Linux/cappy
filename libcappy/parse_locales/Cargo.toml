@@ -1,5 +1,5 @@
 [package]
-name = "parse_locales"
+name = "cappy_parse_locales"
 version = "0.1.0"
 edition = "2021"
 
