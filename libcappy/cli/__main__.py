@@ -1,4 +1,3 @@
-from construct import Optional
 from platformdirs import importlib
 import typer
 import sys
