@@ -23,11 +23,9 @@ install:
     - 'shim'
     - 'grub2-tools-efi'
     - 'grub2-pc'
-  packages_exclude:
-    - 'fedora-release-common'
   dnf_options:
     install_weak_deps: true
-    releasever: rawhide
+    releasever: 36
     user_agent: 'libcappy-libdnf/0.1'
     exclude: 'fedora-release-common'
 

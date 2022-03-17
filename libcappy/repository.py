@@ -1,3 +1,6 @@
+import os
+import shutil
+import subprocess
 import requests
 import json
 import platform
@@ -62,3 +65,27 @@ class Copr:
         # Get the repo file from the Copr API
         response = self.request.get(f'{copr_url}/coprs/{username}/{projectname}/repo/{chroot}/{username}-{projectname}-{chroot}.repo')
         return response.text
+
+
+# Repo functions
+
+def repo_from_cache(cache_folder, output):
+    """
+    Creates a repo file from all the cached RPMs in a folder.
+    """
+    # create output folder
+    if not os.path.exists(output):
+        os.makedirs(output)
+    # then create a packages folder inside
+    package_dir = os.path.join(output, 'packages')
+    os.makedirs(package_dir, exist_ok=True)
+    # recursively find all RPM files in the cache folder, then copy them to our repo folder
+    for root, dirs, files in os.walk(cache_folder):
+        for file in files:
+            if file.endswith('.rpm'):
+                print(f'{file} -> {package_dir}')
+                shutil.copy(os.path.join(root, file), package_dir)
+    # create the repo
+    os.system(f'createrepo {output}')
+    #TODO: Add groupfiles
+repo_from_cache('chroot/var/cache/dnf', 'repo')
