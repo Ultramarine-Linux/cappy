@@ -261,7 +261,7 @@ class Wizard:
 
     @staticmethod
     def tidy_lsblk(dicts: list[dict[str, Any]], dummy='') -> Tuple[set[str], list[dict[str, Any]]]:
-        fields: set[str] = set([f for d in dicts for f in d] + ['NEW MOUNTPOINT', 'OPTIONS'])
+        fields: set[str] = set([f for d in dicts for f in d] + ['NEW MOUNTPOINT', 'OPTIONS', 'FSCK', 'DUMP'])
         newDicts: list[dict[str, Any]] = []
         default = {k: dummy for k in fields}
         for d in dicts:
@@ -311,4 +311,4 @@ class Wizard:
             base.fill_sack()
             comps = base.comps
             assert comps != None, "dnf.Base().comps failed miserably ;("  # might be None
-            return [{'*': '', 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description} for env in comps.environments_iter()], [{'*': '', 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description} for grp in comps.groups_iter()]
+            return [{'*': '', 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description or ''} for env in comps.environments_iter()], [{'*': '', 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description or ''} for grp in comps.groups_iter()]

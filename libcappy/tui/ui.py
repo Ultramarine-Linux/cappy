@@ -96,6 +96,33 @@ class Box:
         self.write()
 
 
+class Toggle:
+    def __init__(self, container: Box):
+        self.contain = container
+        curses.start_color()
+        curses.init_pair(11, curses.COLOR_WHITE, curses.COLOR_MAGENTA)
+    
+    def show(self, y: int, x: int, default: bool = False):
+        self.contain.w.addstr(y, x, '🗹' if default else '🗷')
+        self.pos = y, x
+        self.state = default
+
+    def activate(self, keyhdl: Optional[Callable[['Toggle', str], str]] = None):
+        curses.curs_set(1)
+        self.contain.w.move(*self.pos)
+        while True:
+            key = self.contain.w.getkey()
+            if keyhdl:
+                ret = keyhdl(self, key)
+                if ret == 'deactivate': break
+                if ret: continue
+            match key:
+                case '\x1b': break
+                case '\n': break
+                case 'KEY_ENTER': break
+                case ' ': self.show(*self.pos, not self.state)
+                case _: pass
+
 class Entry:
     def __init__(self, container: Box, length: int):
         self.length = length
@@ -239,7 +266,7 @@ class ScrollList:
                 case 'KEY_DOWN': sel += 1
                 case 'KEY_LEFT': sx -= 1
                 case 'KEY_RIGHT': sx += 1
-                case '\x1b': return  # ESC
+                # case '\x1b': return  # ESC
                 case '\n': return
                 case '\x06': sel = self.find(ds, sel)
                 case _: keyFn(k, sel)
