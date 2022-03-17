@@ -23,14 +23,14 @@ class DummyFile(object):
     def write(self, _: Any): pass
 
 
-def th_envs_grps(q: mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]]):
+def th_envs_grps(q: 'mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]]'):
     save_stdout = sys.stdout
     sys.stdout = DummyFile()
     q.put(Wizard().fetch_envs_grps())
     sys.stdout = save_stdout
 
 
-q: mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]] = mp.Queue()
+q: 'mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]]' = mp.Queue()
 p = mp.Process(target=th_envs_grps, args=(q, ))
 p.start()
 
