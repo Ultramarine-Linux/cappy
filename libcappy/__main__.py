@@ -2,29 +2,32 @@ import subprocess
 import curses
 import multiprocessing as mp
 from typing import Any, Callable
+
+from .install import install
 from .tui.console import get_term_size
 from .tui.ui import Box, Entry, Interface, ScrollList, Toggle, get_mid, new_box
 from .installer import Wizard
 import contextlib
 import sys
 import yaml
+import argparse
 
+ap = argparse.ArgumentParser()
+ap.add_argument('-c', '--chroot', type=str, help="Set custom chroot", default='/mnt', dest='chroot')
+ap.add_argument('-d', '--skip-disk', action='store_true', help='Skip disk selection', dest='sd')
+args = ap.parse_args()
+chroot = args.chroot
+skipdisk = args.sd
 
 class DummyFile(object):
     def write(self, _: Any): pass
 
 
-@contextlib.contextmanager
-def nostdout():
+def th_envs_grps(q: mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]]):
     save_stdout = sys.stdout
     sys.stdout = DummyFile()
-    yield
+    q.put(Wizard().fetch_envs_grps())
     sys.stdout = save_stdout
-
-
-def th_envs_grps(q: mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]]):
-    with nostdout():
-        q.put(Wizard().fetch_envs_grps())
 
 
 q: mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]] = mp.Queue()
@@ -37,7 +40,6 @@ wizard = Wizard()
 locales = [v.split('|') for v in wizard.locales().splitlines()]
 locales = [{'*': '', "Locale": code, "Name": name} for code, name in locales]
 keymaps = wizard.keymaps()
-envirns, agroups = wizard.fetch_envs_grps()  # all envirns and groups
 
 
 def gen_scrollList_hdl(ds: list[dict[str, str]], retName: str, multisel: bool = False):
@@ -200,7 +202,7 @@ def lsblk_hdl(ui: Interface):
     y, _x = min(table.count('\n'), y), min(cw, x)
     box = Box(ui, y-5, _x, 3, max((x-_x)//2-1, 0))
     listhdl = ScrollList(box)
-    ui.draw("Set mountpoints", "Press SPACE to set mountpoint and options.\nPress ENTER when you're done.")
+    ui.draw("Set mountpoints", f"Press SPACE to set mountpoint and options.\nPress ENTER when you're done.\n(it starts with {chroot})")
     ui.window.refresh()
     listhdl.hdl(get_lsblk, lsblk_keyhdl)
     ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
@@ -225,18 +227,19 @@ def main(window: 'curses._CursesWindow'):
     wizard.nmtui(ui)
     hostname = hostnamehdl(ui)
     username, password = add_user(ui)
-    disks = lsblk_hdl(ui)
+    disks = [] if skipdisk else lsblk_hdl(ui)
     ui.draw("Waiting for dnf to finish...", "This will take a while!")
     ui.window.refresh()
     envirns, agroups = q.get()
     envirn = scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'NAME'), 'Select your environment\npress SPACE to select, and press ENTER to continue.')
     groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'NAME', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)')
+    bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'NAME': 'grub'}, {'NAME': 'systemd-boot'}], 'NAME'), 'Select your bootloader\npress SPACE to select, and press ENTER to continue.')
 
     ui.draw("Generating and saving configurations...")
     ui.window.refresh()
     d = {
         "install": {
-            "installroot": "chroot/",
+            "installroot": chroot,
             "volumes": [{'uuid': disk['UUID'], 'mountpoint': disk['NEW MOUNTPOINT'], 'filesystem': disk['FSTYPE'], 'dump': bool(disk['DUMP']), 'fsck': bool(disk['FSCK'])} for disk in disks],
             "packages": ([f"@^{envirn}"] if envirn else []) + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel', 'grub2-efi-x64', 'shim', 'grub2-tools-efi', 'grub2-pc'],
             "dnf_options": {
@@ -250,17 +253,14 @@ def main(window: 'curses._CursesWindow'):
                 f'localectl set-keymap {keymap}',
                 f'hostnamectl hostname {hostname}',
                 f'useradd {username} -p $(mkpasswd {password}) -m'
-            ]
+            ],
+            "bootloader": bootloader
         }
     }
     yaml.dump(d, open('/tmp/cappyinstall.yml', 'w+'))
     
     ui.draw("You will see your Cappy configuration file", "If you want to edit anything, just edit it.\nWhen you finish reviewing the file, press CTRL+X, Y, then ENTER to save the file.")
     ui.wait()
-
-
-assert any(envirns), "No environments fetched from dnf"
-assert any(agroups), "No groups fetched from dnf"
 
 
 print("Press F11 to open in fullscreen.")
@@ -271,10 +271,6 @@ input("Press ENTER to get to the next screen.")
 curses.wrapper(main)
 subprocess.run('nano /tmp/cappyinstall.yml')
 if input("You've reached the end of the wizard. Ready to install? [y/N]") in 'Yy':
-    pass
-# try:
-#     curses.wrapper(main)
-# except Exception as err:
-#     traceback.print_exc()
-# finally:
-#     input('Press ENTER to exit')
+    print("!! THIS WILL ERASE YOUR DATA IF NOT CONFIGURED PROPERLY!!")
+    if input("Still continue? [yes]") == 'yes':
+        install()

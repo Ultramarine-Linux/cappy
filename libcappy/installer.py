@@ -46,7 +46,7 @@ class CfgParser(Config):
     def dump(self):
         return self.config
 
-    def fstab(self) -> list[dict[str, str]]:
+    def fstab(self) -> list[dict[str, str|bool]]:
         """Parses the volumes section of the install and returns it as a proper fstab dictionary.
         """
         volumes = self.config['volumes']
@@ -201,7 +201,9 @@ class Installer:
         self.nspawn('bootctl install --boot-path=/boot --esp-path=/boot')
         self.nspawn(f'kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz')
         self.nspawn('dnf reinstall $(rpm -qa|grep kernel-core)')
-
+    def mount(self, table: list[dict[str, str|bool]]):
+        for entry in table:
+            self.nspawn(f"mount {entry['device']} {entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
 class Wizard:
     def lsblk(self):
         parts: list[dict[str, str]] = []
