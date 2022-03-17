@@ -1,7 +1,5 @@
 import curses
-from time import sleep
-import traceback
-from typing import Any, Callable
+from typing import Callable
 from .tui.console import get_term_size
 from .tui.ui import Box, Entry, Interface, ScrollList, get_mid, new_box
 from .installer import Wizard
@@ -10,33 +8,31 @@ wizard = Wizard()
 
 locales = [v.split('|') for v in wizard.locales().splitlines()]
 locales = [{'*': '', "Locale": code, "Name": name} for code, name in locales]
-get_locale = lambda: locales
-def locale_keyhdl(k: str, sel: int):
-    if k == ' ':
-        for d in locales:
-            d['*'] = ''
-        locales[sel]['*'] = '*'
-def parse_locale_result():
-    for d in locales:
-        if d['*']:
-            return d['Locale']
-    return ''
 keymaps = wizard.keymaps()
-get_keymap = lambda: keymaps
-def keymap_keyhdl(k: str, sel: int):
-    if k == ' ':
-        for d in keymaps:
-            d['*'] = ''
-        keymaps[sel]['*'] = '*'
-def parse_keymap_result():
-    for d in keymaps:
-        if d['*']:
-            return d['Keymap']
-    return ''
+envirns = wizard.envs()  # all envirns
+agroups = wizard.grps()  # all groups
+def gen_scrollList_hdl(ds: list[dict[str, str]], retName: str, multisel: bool = False):
+    getFn = lambda: ds
+    def keyhdl(k: str, sel: int):
+        if k == ' ':
+            if multisel:
+                ds[sel]['*'] = '' if ds[sel]['*'] else '*'
+                return
+            for d in ds:
+                d['*'] = ''
+            ds[sel]['*'] = '*'
+    def parse():
+        if multisel:
+            return [d[retName] for d in ds if d['*']]
+        for d in ds:
+            if d['*']:
+                return d[retName]
+        return ''
+    return getFn, keyhdl, parse
 lsblk = wizard.strip_lsblk(wizard.tidy_lsblk(wizard.lsblk())[1])
 get_lsblk = lambda: lsblk
 
-def scrollList_hdl(ui: Interface, dsFn: Callable[[], list[dict[str, str]]], keyFn: Callable[[str, int], Any], parseFn: Callable[[], str], msg: str) -> str:
+def scrollList_hdl(ui: Interface, dsFn: Callable[[], list[dict[str, str]]], keyFn: Callable[[str, int], None], parseFn: Callable[[], str|list[str]], msg: str):
     x, y = get_term_size()
     cw, table = ScrollList.build_table(dsFn())
     y, _x = min(table.count('\n'), y), min(cw, x)
@@ -46,7 +42,7 @@ def scrollList_hdl(ui: Interface, dsFn: Callable[[], list[dict[str, str]]], keyF
     ui.window.refresh()
     listhdl.hdl(dsFn, keyFn)
     res = parseFn()
-    while not res:
+    while not any(res):
         Box(ui, 10, 40, *get_mid(y, x, 10, 40)).write('A selection is required!\nPress SPACE to try again.')
         ui.wait(show=False)
         listhdl.hdl(dsFn, keyFn)
@@ -181,27 +177,21 @@ def main(window: 'curses._CursesWindow'):
     ui.draw("Welcome to Ultramarine Installer!", "This TUI wizard will guide you through the installation.")
     ui.wait()
 
-    # locales
-    locale = scrollList_hdl(ui, get_locale, locale_keyhdl, parse_locale_result, 'Select your locale\npress SPACE to select, and press ENTER to continue.')
-
-    # keyboard layout
-    keymap = scrollList_hdl(ui, get_keymap, keymap_keyhdl, parse_keymap_result, 'Select your keymap\npress SPACE to select, and press ENTER to continue.')
-
-    # network/hostname (nmtui)
+    locale = scrollList_hdl(ui, *gen_scrollList_hdl(locales, 'Locale'), 'Select your locale\npress SPACE to select, and press ENTER to continue.')
+    keymap = scrollList_hdl(ui, *gen_scrollList_hdl(keymaps, 'Keymap'), 'Select your keymap\npress SPACE to select, and press ENTER to continue.')
     wizard.nmtui(ui)
     hostname = hostnamehdl(ui)
-
-    # user
     username, password = add_user(ui)
-
-    # packages
-
-    # disks
+    envirn = scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'NAME'), 'Select your environment\npress SPACE to select, and press ENTER to continue.')
+    groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'NAME', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)')
     disks = lsblk_hdl(ui)
 
     # install...
 
+assert any(envirns), "No environments fetched from dnf"
+assert any(agroups), "No groups fetched from dnf"
 
+print("")
 print("Press F11 to open in fullscreen.")
 print("You might also need to press and hold Fn alongside.")
 input("Press ENTER to get to the next screen.")

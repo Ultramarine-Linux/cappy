@@ -9,7 +9,7 @@ import shutil
 from typing import Any, Tuple
 from urllib.request import urlopen
 from dnf.exceptions import TransactionCheckError
-
+from dnf import Base
 from libcappy.tui.ui import Interface
 from .packages import Packages
 from .repository import Copr
@@ -303,3 +303,15 @@ class Wizard:
                         ui.draw("Connecting to the Internet by yourself", "We will check if we can successfully connect to the Internet after you press SPACE.")
                         ui.wait()
                         break
+
+    def envs(self):
+        with Base() as base:
+            comps = base.comps
+            assert comps != None, "dnf.Base().comps failed miserably ;("  # might be None
+            return [{'*': '', 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description} for env in comps.environments_iter()]
+
+    def grps(self):
+        with Base() as base:
+            comps = base.comps
+            assert comps != None, "dnf.Base().comps failed miserably ;("
+            return [{'*': '', 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description} for grp in comps.groups_iter()]
