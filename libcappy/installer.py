@@ -304,14 +304,9 @@ class Wizard:
                         ui.wait()
                         break
 
-    def envs(self):
+    def fetch_envs_grps(self):
         with Base() as base:
+            base.read_all_repos(opts=base.conf.substitutions)
             comps = base.comps
             assert comps != None, "dnf.Base().comps failed miserably ;("  # might be None
-            return [{'*': '', 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description} for env in comps.environments_iter()]
-
-    def grps(self):
-        with Base() as base:
-            comps = base.comps
-            assert comps != None, "dnf.Base().comps failed miserably ;("
-            return [{'*': '', 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description} for grp in comps.groups_iter()]
+            return [{'*': '', 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description} for env in comps.environments_iter()], [{'*': '', 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description} for grp in comps.groups_iter()]

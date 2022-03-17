@@ -9,8 +9,7 @@ wizard = Wizard()
 locales = [v.split('|') for v in wizard.locales().splitlines()]
 locales = [{'*': '', "Locale": code, "Name": name} for code, name in locales]
 keymaps = wizard.keymaps()
-envirns = wizard.envs()  # all envirns
-agroups = wizard.grps()  # all groups
+envirns, agroups = wizard.fetch_envs_grps()  # all envirns and groups
 def gen_scrollList_hdl(ds: list[dict[str, str]], retName: str, multisel: bool = False):
     getFn = lambda: ds
     def keyhdl(k: str, sel: int):
