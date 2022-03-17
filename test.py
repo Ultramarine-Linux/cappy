@@ -1,3 +1,7 @@
+from datetime import datetime
+from libcappy.installer import Wizard
+
+
 def cappy_test():
     import sys
     import os
@@ -25,10 +29,14 @@ def cappy_test():
             pkgs = packages.Packages()
             pkgs.install(['powertop'])
 
-def wboy_test():
-    from libcappy.installer import Wizard
-    from libcappy.tui.console import style
-    w = Wizard()
-    print(w.locales())
 
-wboy_test()
+def build_table(ds: list[dict[str, str]]):cols = list(ds[0].keys());return "│".join(col+' '*((cw := [max(len(cols[n]), [max(len(d[cols[n]])for d in ds)for n in range(len(cols))][n])for n in range(len(cols))])[i]-len(col))for i, col in enumerate(cols))+'\n'+"\n".join("│".join(v+' '*(cw[i]-len(v))for i, v in enumerate(r))for r in [[d[col]for col in cols]for d in ds])
+
+
+w = Wizard()
+lsblk = w.lsblk()
+_, lsblk = w.uniform_dict(lsblk)
+lsblk = w.strip_lsblk(lsblk)
+d = datetime.now()
+print(build_table(lsblk))
+print((datetime.now() - d).microseconds)

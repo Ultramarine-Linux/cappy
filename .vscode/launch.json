@@ -6,7 +6,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": true
+            // "justMyCode": true
         },
         {
             "name": "Python: Module",
@@ -18,6 +18,13 @@
                 "example.yml"
             ],
             "sudo": true,
+        },
+        {
+            "name": "Python: TUI",
+            "type": "python",
+            "request": "launch",
+            "module": "libcappy",
+            "console": "externalTerminal"
         }
     ]
 }

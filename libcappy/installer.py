@@ -7,9 +7,12 @@ from dataclasses import field
 import re
 import shutil
 from typing import Any, Tuple
+from urllib.request import urlopen
 from dnf.exceptions import TransactionCheckError
-from libcappy.packages import Packages
-from libcappy.repository import Copr
+
+from libcappy.tui.ui import Interface
+from .packages import Packages
+from .repository import Copr
 import logging
 logger = logging.getLogger(__name__)
 import os
@@ -275,3 +278,25 @@ class Wizard:
     def locales(self):
         #! fix when build
         return subprocess.getoutput(os.path.join(os.path.dirname(__file__), 'parse_locales/target/release/cappy_parse_locales'))
+
+    def keymaps(self):
+        return [{"*": '', "Keymap": v} for v in subprocess.getoutput("localectl list-keymaps --no-pager").splitlines()]
+
+    def nmtui(self, ui: Interface):
+        while True:
+            try:
+                ui.draw("Checking Internet connection...", 'Trying to connect to https://getfedora.org/')
+                ui.window.refresh()
+                urlopen('https://getfedora.org/', timeout=10)
+                return
+            except:
+                ui.draw("Failed to connect!", "Do you want to open nmtui to connect to a wireless network? [y/n]")
+                while True:
+                    k = ui.window.getkey()
+                    if k in 'yY':
+                        subprocess.run('nmtui')  #! requires dnf install NetworkManager-tui
+                        break
+                    elif k in 'nN':
+                        ui.draw("Connecting to the Internet by yourself", "We will check if we can successfully connect to the Internet after you press SPACE.")
+                        ui.wait()
+                        break
