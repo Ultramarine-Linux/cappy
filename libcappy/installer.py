@@ -23,7 +23,7 @@ import subprocess
 import importlib.resources
 class Config(object):
     # the class for reading and writing configuration files
-    def __init__(self, configfile):
+    def __init__(self, configfile: str):
         # read the configuration YAML file
         with open(configfile, 'r') as f:
             self.config = yaml.load(f, Loader=yaml.FullLoader)['install']
@@ -40,13 +40,13 @@ class CfgParser(Config):
 
     cfg = an instance of libcappy.installer.Config()
     """
-    def __init__(self,config):
+    def __init__(self, config: Config):
         self.config = config
 
     def dump(self):
         return self.config
 
-    def fstab(self):
+    def fstab(self) -> list[dict[str, str]]:
         """Parses the volumes section of the install and returns it as a proper fstab dictionary.
         """
         volumes = self.config['volumes']
@@ -201,10 +201,6 @@ class Installer:
         self.nspawn('bootctl install --boot-path=/boot --esp-path=/boot')
         self.nspawn(f'kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz')
         self.nspawn('dnf reinstall $(rpm -qa|grep kernel-core)')
-    def mount(self, table: list[dict[str, str|bool]]):
-        for entry in table:
-            self.nspawn(f"mount {entry['device']} {entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
-
 
 class Wizard:
     def lsblk(self):
@@ -264,8 +260,8 @@ class Wizard:
         return parts
 
     @staticmethod
-    def uniform_dict(dicts: list[dict[str, Any]], dummy='') -> Tuple[set[str], list[dict[str, Any]]]:
-        fields: set[str] = [f for d in dicts for f in d]
+    def tidy_lsblk(dicts: list[dict[str, Any]], dummy='') -> Tuple[set[str], list[dict[str, Any]]]:
+        fields: set[str] = set([f for d in dicts for f in d] + ['NEW MOUNTPOINT', 'OPTIONS'])
         newDicts: list[dict[str, Any]] = []
         default = {k: dummy for k in fields}
         for d in dicts:
@@ -276,7 +272,8 @@ class Wizard:
 
     def strip_lsblk(self, parts: list[dict[str, str]]):
         # we don't allow users to select their installation media as the target
-        return [d for d in parts if d['MOUNTPOINTS'] not in ['/', '/boot/efi', '/boot']]
+        lsblk = [d for d in parts if d['MOUNTPOINTS'] not in ['/', '/boot/efi', '/boot']]
+        return [{('CURRENT MOUNTPOINT' if k=='MOUNTPOINTS' else k): v for k, v in d.items()} for d in lsblk]
 
     def localectl(self):
         return subprocess.getoutput("localectl list-locales --no-pager").splitlines()

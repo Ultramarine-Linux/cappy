@@ -33,6 +33,8 @@ def parse_keymap_result():
         if d['*']:
             return d['Keymap']
     return ''
+lsblk = wizard.strip_lsblk(wizard.tidy_lsblk(wizard.lsblk())[1])
+get_lsblk = lambda: lsblk
 
 def scrollList_hdl(ui: Interface, dsFn: Callable[[], list[dict[str, str]]], keyFn: Callable[[str, int], Any], parseFn: Callable[[], str], msg: str) -> str:
     x, y = get_term_size()
@@ -114,7 +116,63 @@ def add_user(ui: Interface) -> tuple[str, str]:
             curEn = ens[1]
             continue
         return usernameEn.text, passwordEn.text
-        
+
+
+def lsblk_hdl(ui: Interface):
+    def lsblk_keyhdl(k: str, sel: int):
+        if k == ' ':
+            global curEn
+            box = new_box(ui, 5, 100)
+            f = f"mount {lsblk[sel]['name']} "
+            box.write(f'{f}\n-o ')
+            newMpEn = box.add_entry(100 - len(f) - 2)
+            optionEn = box.add_entry(95)
+            newMpEn.text = lsblk[sel]['NEW MOUNTPOINT']
+            optionEn.text = lsblk[sel]['OPTIONS']
+            newMpEn.show(1, 1+len(f))
+            optionEn.show(2, 5)
+            ens = [newMpEn, optionEn]
+            curEn = ens[0]
+
+            def keyhdl(en: Entry, key: str):
+                global curEn
+                if key == '\t':
+                    i = ens.index(en)+1
+                    curEn = ens[0 if i > 2 else i]
+                    return 'deactivate'
+                if key == '\n':
+                    curEn = None
+                    return 'deactivate'
+                return ''
+            while True:
+                if curEn:
+                    curEn.activate(keyhdl)
+                    continue
+                if not newMpEn.text:
+                    box = new_box(ui, 4, 30).write("Please specify a mountpoint.")
+                    box.w.getkey()
+                    curEn = ens[0]
+                    continue
+                lsblk[sel]['NEW MOUNTPOINT'] = newMpEn.text
+                lsblk[sel]['OPTIONS'] = optionEn.text
+
+    x, y = get_term_size()
+    cw, table = ScrollList.build_table(get_lsblk())
+    y, _x = min(table.count('\n'), y), min(cw, x)
+    box = Box(ui, y-5, _x, 3, max((x-_x)//2-1, 0))
+    listhdl = ScrollList(box)
+    ui.draw("Set mountpoints", "Press SPACE to set mountpoint and options.\nPress ENTER when you're done.")
+    ui.window.refresh()
+    listhdl.hdl(get_lsblk, lsblk_keyhdl)
+    ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
+    has_root = [d for d in ds if d['NEW MOUNTPOINT'] == '/']
+    while not any(has_root):
+        new_box(ui, 5, 27).write('A selection is required!\nPress SPACE to try again.')
+        ui.wait(show=False)
+        listhdl.hdl(get_lsblk, lsblk_keyhdl)
+        ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
+        has_root = [d for d in ds if d['NEW MOUNTPOINT'] == '/']
+    return ds
 
 
 def main(window: 'curses._CursesWindow'):
@@ -139,9 +197,7 @@ def main(window: 'curses._CursesWindow'):
     # packages
 
     # disks
-    # fields, lsblk = wizard.uniform_dict(wizard.lsblk())
-    # ui.draw("Select a partition", "Use arrow keys to navigate and press ENTER to setup mounting")
-    # listhdl.hdl(lsblk)
+    disks = lsblk_hdl(ui)
 
     # install...
 

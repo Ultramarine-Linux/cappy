@@ -35,7 +35,7 @@ def build_table(ds: list[dict[str, str]]):cols = list(ds[0].keys());return "│"
 
 w = Wizard()
 lsblk = w.lsblk()
-_, lsblk = w.uniform_dict(lsblk)
+_, lsblk = w.tidy_lsblk(lsblk)
 lsblk = w.strip_lsblk(lsblk)
 d = datetime.now()
 print(build_table(lsblk))
