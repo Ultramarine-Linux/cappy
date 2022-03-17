@@ -306,7 +306,9 @@ class Wizard:
 
     def fetch_envs_grps(self):
         with Base() as base:
-            base.read_all_repos(opts=base.conf.substitutions)
+            #TODO: Option to load local repo for offline mode
+            base.read_all_repos()
+            base.fill_sack()
             comps = base.comps
             assert comps != None, "dnf.Base().comps failed miserably ;("  # might be None
             return [{'*': '', 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description} for env in comps.environments_iter()], [{'*': '', 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description} for grp in comps.groups_iter()]
