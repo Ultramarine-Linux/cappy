@@ -88,4 +88,3 @@ def repo_from_cache(cache_folder, output):
     # create the repo
     os.system(f'createrepo {output}')
     #TODO: Add groupfiles
-repo_from_cache('chroot/var/cache/dnf', 'repo')
