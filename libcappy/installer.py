@@ -205,7 +205,8 @@ class Installer:
         for entry in table:
             self.nspawn(f"mount {entry['device']} {entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
 class Wizard:
-    def lsblk(self):
+    @staticmethod
+    def _lsblk():
         parts: list[dict[str, str]] = []
         lines = subprocess.getoutput("lsblk -l").splitlines()
         lines.pop(0)
@@ -215,7 +216,7 @@ class Wizard:
                 parts[-1]['MOUNTPOINTS'] = l.strip()
                 continue
             ls = l.split()
-            ls.append('') # in case no mp
+            ls.append('')  # in case no mp
             parts.append({
                 'NAME': ls[0],
                 'SIZE': ls[3],
@@ -225,14 +226,18 @@ class Wizard:
 
         lines = subprocess.getoutput("lsblk -lf").splitlines()
         fields = re.findall(r'\S+\s*', lines.pop(0), re.RegexFlag.M)
+        last_field = fields[-1]
         i: int = 0
         for l in lines:
             left = 0
             cur: dict[str, str] = {}
             for field in fields:
-                length = len(field)
-                value = l[left:left+length]
-                left += length
+                if last_field == field:
+                    value = l[left:]
+                else:
+                    length = len(field)
+                    value = l[left:left+length]
+                    left += length
                 v = value.strip()
                 # first field
                 if (f := field.rstrip().upper()) == 'NAME':
@@ -255,16 +260,17 @@ class Wizard:
                             break
 
                 assert any(cur)
-                if not v: continue
+                if not v:
+                    continue
                 cur[f] = v
             if any(cur):
                 parts[i] = cur
         return parts
 
     @staticmethod
-    def tidy_lsblk(dicts: list[dict[str, Any]], dummy='') -> Tuple[set[str], list[dict[str, Any]]]:
+    def tidy_lsblk(dicts: list[dict[str, str]], dummy: str = '') -> tuple[set[str], list[dict[str, str]]]:
         fields: set[str] = set([f for d in dicts for f in d] + ['NEW MOUNTPOINT', 'OPTIONS', 'FSCK', 'DUMP'])
-        newDicts: list[dict[str, Any]] = []
+        newDicts: list[dict[str, str]] = []
         default = {k: dummy for k in fields}
         for d in dicts:
             new = default.copy()
@@ -272,10 +278,18 @@ class Wizard:
             newDicts.append(new)
         return fields, newDicts
 
-    def strip_lsblk(self, parts: list[dict[str, str]]):
+    @staticmethod
+    def strip_lsblk(parts: list[dict[str, str]]):
         # we don't allow users to select their installation media as the target
         lsblk = [d for d in parts if d['MOUNTPOINTS'] not in ['/', '/boot/efi', '/boot']]
-        return [{('CURRENT MOUNTPOINT' if k=='MOUNTPOINTS' else k): v for k, v in d.items()} for d in lsblk]
+        s = ['NAME', 'TYPE', 'FSTYPE', 'FSVER', 'LABEL', 'SIZE', 'MOUNTPOINTS', 'NEW MOUNTPOINT', 'OPTIONS', 'DUMP', 'FSCK', 'UUID', 'FSAVAIL', 'FSUSE%']
+        ds: list[dict[str, str]] = []
+        for d in lsblk:
+            new = {}
+            for ss in s:
+                new[ss] = d[ss]
+            ds.append(new)
+        return ds
 
     def localectl(self):
         return subprocess.getoutput("localectl list-locales --no-pager").splitlines()
@@ -306,7 +320,8 @@ class Wizard:
                         ui.wait()
                         break
 
-    def fetch_envs_grps(self):
+    @staticmethod
+    def fetch_envs_grps() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
         with Base() as base:
             #TODO: Option to load local repo for offline mode
             base.read_all_repos()

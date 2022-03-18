@@ -7,7 +7,6 @@ from .install import install
 from .tui.console import get_term_size
 from .tui.ui import Box, Entry, Interface, ScrollList, Toggle, get_mid, new_box
 from .installer import Wizard
-import contextlib
 import sys
 import yaml
 import argparse
@@ -26,7 +25,7 @@ class DummyFile(object):
 def th_envs_grps(q: 'mp.Queue[tuple[list[dict[str, str]], list[dict[str, str]]]]'):
     save_stdout = sys.stdout
     sys.stdout = DummyFile()
-    q.put(Wizard().fetch_envs_grps())
+    q.put(Wizard.fetch_envs_grps())
     sys.stdout = save_stdout
 
 
@@ -127,27 +126,34 @@ def add_user(ui: Interface) -> tuple[str, str]:
             return 'deactivate'
         return ''
     while True:
+        box.write()
+        for en in ens:
+            en.show()
         if curEn:
             curEn.activate(keyhdl, invisible=curEn != usernameEn)
             continue
         if not usernameEn.text:
-            box = new_box(ui, 4, 38).write("You can't leave your username blank.")
-            box.w.getkey()
+            popup = new_box(ui, 4, 38).write("You can't leave your username blank.")
+            popup.w.getkey()
+            del popup
             curEn = ens[0]
             continue
         if not passwordEn.text:
-            box = new_box(ui, 4, 38).write("You can't leave you password blank.")
-            box.w.getkey()
+            popup = new_box(ui, 4, 38).write("You can't leave you password blank.")
+            popup.w.getkey()
+            del popup
             curEn = ens[1]
             continue
         if not retypeEn.text:
-            box = new_box(ui, 4, 30).write("Please retype your password.")
-            box.w.getkey()
+            popup = new_box(ui, 4, 30).write("Please retype your password.")
+            popup.w.getkey()
+            del popup
             curEn = ens[2]
             continue
         if passwordEn.text != retypeEn.text:
-            box = new_box(ui, 4, 27).write("Password is not the same.")
-            box.w.getkey()
+            popup = new_box(ui, 4, 27).write("Password is not the same.")
+            popup.w.getkey()
+            del popup
             curEn = ens[1]
             continue
         return usernameEn.text, passwordEn.text
@@ -158,10 +164,10 @@ def lsblk_hdl(ui: Interface):
         if k == ' ':
             global curEn
             box = new_box(ui, 7, 100)
-            f = f"mount {lsblk[sel]['name']} "
+            f = f"mount /dev/{lsblk[sel]['NAME']} {chroot}"
             box.write(f'{f}\n-o \ndump: \nfsck: ')
             newMpEn = box.add_entry(100 - len(f) - 2)
-            optionEn = box.add_entry(95)
+            optionEn = box.add_entry(94)
             newMpEn.text = lsblk[sel]['NEW MOUNTPOINT']
             optionEn.text = lsblk[sel]['OPTIONS']
             newMpEn.show(1, 1+len(f))
@@ -177,7 +183,7 @@ def lsblk_hdl(ui: Interface):
                 global curEn
                 if key == '\t':
                     i = ens.index(en)+1
-                    curEn = ens[0 if i > 4 else i]
+                    curEn = ens[0 if i > 3 else i]
                     return 'deactivate'
                 if key == '\n':
                     curEn = None
@@ -196,11 +202,12 @@ def lsblk_hdl(ui: Interface):
                 lsblk[sel]['OPTIONS'] = optionEn.text
                 lsblk[sel]['FSCK'] = '*' if fsckCh.state else ''
                 lsblk[sel]['DUMP'] = '*' if dumpCh.state else ''
+                return
 
     x, y = get_term_size()
     cw, table = ScrollList.build_table(get_lsblk())
-    y, _x = min(table.count('\n'), y), min(cw, x)
-    box = Box(ui, y-5, _x, 3, max((x-_x)//2-1, 0))
+    _y, _x = min(table.count('\n')+4, y-7), min(cw+4, x)
+    box = Box(ui, _y if _y <= y-10 else y-10, _x, 8, (x-cw)//2-1)
     listhdl = ScrollList(box)
     ui.draw("Set mountpoints", f"Press SPACE to set mountpoint and options.\nPress ENTER when you're done.\n(it starts with {chroot})")
     ui.window.refresh()

@@ -6,6 +6,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/libcappy"
             // "justMyCode": true
         },
         {

@@ -1,12 +1,10 @@
 import atexit
 import os
 import curses
-from time import sleep
-from typing import Any, Optional, Callable, TypeVar
+from typing import Any, Optional, Callable
 
-from libcappy.tui.console import get_term_size
-from .keyhdl import keys, syek
-from .pyTableMaker import CustomTable
+from .console import get_term_size
+from .keyhdl import keys
 
 os.environ.setdefault('ESCDELAY', '10')
 
@@ -35,9 +33,9 @@ class Interface:
         self.window.move(0, 0)
         for line in title.splitlines():
             self.window.addstr('\n' + self.mid(line))
-        self.window.addstr('\n\n')
-        for line in desc.split('\n'):
-            self.window.addstr("  " + line)
+        self.window.addstr('\n')
+        for line in desc.splitlines():
+            self.window.addstr("\n  " + line)
         self.window.refresh()
 
     def wait(self, wait_for: str = 'SPACE', show: bool = True):
@@ -109,8 +107,9 @@ class Toggle:
 
     def activate(self, keyhdl: Optional[Callable[['Toggle', str], str]] = None):
         curses.curs_set(1)
-        self.contain.w.move(*self.pos)
         while True:
+            y, x = self.pos
+            self.contain.w.move(y, x+1)
             key = self.contain.w.getkey()
             if keyhdl:
                 ret = keyhdl(self, key)
@@ -124,20 +123,25 @@ class Toggle:
                 case _: pass
 
 class Entry:
+    text = ''
+    invisible = False
     def __init__(self, container: Box, length: int):
         self.length = length
         self.contain = container
-        self.text = ''
         curses.start_color()
         curses.init_pair(11, curses.COLOR_WHITE, curses.COLOR_MAGENTA)
+        container.w.keypad(True)
 
-    def show(self, y: int, x: int):
-        self.contain.w.addstr(y, x, ' '*self.length, curses.color_pair(11))
+    def show(self, y: int = -1, x: int = -1):
+        if y == -1: y = self.pos[0]
+        if x == -1: x = self.pos[1]
+        self.contain.w.addstr(y, x, ('*'*len(self.text) if self.invisible else self.text) + ' '*(self.length-len(self.text)), curses.color_pair(11))
         self.pos = y, x
 
     def activate(self, keyhdl: Optional[Callable[['Entry', str], str]] = None, invisible: bool = False):
         curses.curs_set(1)
         tpos = len(self.text)
+        self.invisible = invisible
         y, x = self.pos
         self.contain.w.move(y, x)
         while True:
@@ -149,8 +153,6 @@ class Entry:
                 if ret:
                     continue
             match key:
-                case '\x1b':  # ESC or ENTER
-                    break
                 case '\n':
                     break
                 case 'KEY_ENTER':
@@ -160,6 +162,11 @@ class Entry:
                 case 'KEY_RIGHT':
                     tpos = min(tpos + 1, len(self.text))
                 case 'KEY_BACKSPACE':
+                    if tpos == 0:
+                        continue
+                    self.text = self.text[:tpos-1] + self.text[tpos:]
+                    tpos -= 1
+                case '\x7f':
                     if tpos == 0:
                         continue
                     self.text = self.text[:tpos-1] + self.text[tpos:]
@@ -199,11 +206,10 @@ class ScrollList:
     @staticmethod
     def build_table(ds: list[dict[str, str]]):
         cols = list(ds[0].keys())
-        cw = [max(len(d[cols[n]])for d in ds)for n in range(len(cols))]  # column width
-        cw = [max(len(cols[n]), cw[n])for n in range(len(cols))]  # + count len(column name)
+        cw = [max(len(cols[n]), [max(len(d[cols[n]])for d in ds)for n in range(len(cols))][n])for n in range(len(cols))]
         rows = [[d[col]for col in cols]for d in ds]
-        f = "│".join(col+' '*(cw[i]-len(col))for i, col in enumerate(cols))+'\n'  # build first line
-        return sum(cw)+len(cols)-3, f+"\n".join("│".join(v+' '*(cw[i]-len(v))for i, v in enumerate(r))for r in rows)  # build remain
+        f = "│".join(col+' '*(cw[i]-len(col))for i, col in enumerate(cols))+'\n'
+        return sum(cw)+len(cols)-3, f+"\n".join("│".join(v+' '*(cw[i]-len(v))for i, v in enumerate(r))for r in rows)
 
     def write(self, ls: list[str], sel: int = 0):
         a = self.box.w.addstr
