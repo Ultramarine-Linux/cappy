@@ -3,24 +3,26 @@
 # Basically DNFStrap, but now in Python.
 # Copyright (C) 2022 Cappy Ishihara and contributors under the MIT License.
 
-from dataclasses import field
+import importlib.resources
+import logging
+import os
 import re
 import shutil
-from typing import Any, Tuple
+import subprocess
 from urllib.request import urlopen
-from dnf.exceptions import TransactionCheckError
+
+import yaml
 from dnf import Base
-from libcappy.tui.ui import Interface
+
+from libcappy.common import DS
+from libcappy.ui import Interface
+
 from .packages import Packages
 from .repository import Copr
-import logging
+
 logger = logging.getLogger(__name__)
-import os
-import yaml
-import json
-import platform
-import subprocess
-import importlib.resources
+
+
 class Config(object):
     # the class for reading and writing configuration files
     def __init__(self, configfile: str):
@@ -40,23 +42,24 @@ class CfgParser(Config):
 
     cfg = an instance of libcappy.installer.Config()
     """
+
     def __init__(self, config: Config):
         self.config = config
 
     def dump(self):
         return self.config
 
-    def fstab(self) -> list[dict[str, str|bool]]:
+    def fstab(self) -> list[dict[str, str | bool]]:
         """Parses the volumes section of the install and returns it as a proper fstab dictionary.
         """
         volumes = self.config['volumes']
         entry_def = {
-                'device': str,
-                'mountpoint': str,
-                'filesystem': str,
-                'opts': str,
-                'dump': bool,
-                'fsck': bool,
+            'device': str,
+            'mountpoint': str,
+            'filesystem': str,
+            'opts': str,
+            'dump': bool,
+            'fsck': bool,
         }
         entry_def.setdefault('opts', 'defaults')
         entry_def.setdefault('dump', False)
@@ -91,6 +94,7 @@ class CfgParser(Config):
             fstab.append(entry)
         return fstab
 
+
 class Installer:
     """
     [summary]
@@ -113,7 +117,7 @@ class Installer:
         self.logger = logger
         self.logger.debug('Initializing Installer class')
 
-    def nspawn(self,command: str):
+    def nspawn(self, command: str):
         """Calls systemd-nspawn to do the bidding
 
         Args:
@@ -144,6 +148,7 @@ class Installer:
         with open(os.path.join(self.chroot_path, '.autorelabel'), 'w') as f:
             f.write('1')
         self.logger.info('Installed packages')
+
     def postInstall(self):
         """postInstall
         Runs the post-installation commands.
@@ -151,7 +156,8 @@ class Installer:
         self.logger.info('Running post-installation commands')
         for command in self.config['postinstall']:
             self.nspawn(command)
-    def fstab(self, table: list[dict[str, str|bool]]):
+
+    def fstab(self, table: list[dict[str, str | bool]]):
         """fstab
         Generates a Filesystem Table (fstab)
 
@@ -179,7 +185,8 @@ class Installer:
                     entry['fsck'] = '0'
                 f.write(f'{entry["fsck"]}\n')
         self.logger.debug('Wrote fstab')
-    def grubGen(self, root: str, boot: str=None):
+
+    def grubGen(self, root: str, boot: str = None):
         """[summary]
         Configures GRUB for the chroot.
         """
@@ -195,19 +202,23 @@ class Installer:
         self.nspawn(f'grubby --remove-args="rd.live.image" --update-kernel ALL')
         self.nspawn(f'grubby --remove-args="root" --update-kernel=ALL --copy-default')
         self.nspawn(f'grubby --add-args="root={root}" --update-kernel=ALL --copy-default')
-    def systemdBoot(self, root: str, boot: str=None):
+
+    def systemdBoot(self, root: str, boot: str = None):
         # make /efi
         os.makedirs(os.path.join(self.chroot_path, 'boot', 'efi'), exist_ok=True)
         self.nspawn('bootctl install --boot-path=/boot --esp-path=/boot')
         self.nspawn(f'kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz')
         self.nspawn('dnf reinstall $(rpm -qa|grep kernel-core)')
-    def mount(self, table: list[dict[str, str|bool]]):
+
+    def mount(self, table: list[dict[str, str | bool]]):
         for entry in table:
             self.nspawn(f"mount {entry['device']} {entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
+
+
 class Wizard:
     @staticmethod
     def lsblk():
-        parts: list[dict[str, str]] = []
+        parts: DS = []
         lines = subprocess.getoutput("lsblk -l").splitlines()
         lines.pop(0)
         for l in lines:
@@ -258,8 +269,6 @@ class Wizard:
                             cur = part
                             i = n
                             break
-
-                assert any(cur)
                 if not v:
                     continue
                 cur[f] = v
@@ -268,9 +277,9 @@ class Wizard:
         return parts
 
     @staticmethod
-    def tidy_lsblk(dicts: list[dict[str, str]], dummy: str = '') -> tuple[set[str], list[dict[str, str]]]:
+    def tidy_lsblk(dicts: DS, dummy: str = '') -> tuple[set[str], DS]:
         fields: set[str] = set([f for d in dicts for f in d] + ['NEW MOUNTPOINT', 'OPTIONS', 'FSCK', 'DUMP'])
-        newDicts: list[dict[str, str]] = []
+        newDicts: DS = []
         default = {k: dummy for k in fields}
         for d in dicts:
             new = default.copy()
@@ -279,11 +288,11 @@ class Wizard:
         return fields, newDicts
 
     @staticmethod
-    def strip_lsblk(parts: list[dict[str, str]]):
+    def strip_lsblk(parts: DS):
         # we don't allow users to select their installation media as the target
         lsblk = [d for d in parts if d['MOUNTPOINTS'] not in ['/', '/boot/efi', '/boot']]
         s = ['NAME', 'TYPE', 'FSTYPE', 'FSVER', 'LABEL', 'SIZE', 'MOUNTPOINTS', 'NEW MOUNTPOINT', 'OPTIONS', 'DUMP', 'FSCK', 'UUID', 'FSAVAIL', 'FSUSE%']
-        ds: list[dict[str, str]] = []
+        ds: DS = []
         for d in lsblk:
             new = {}
             for ss in s:
@@ -301,17 +310,16 @@ class Wizard:
     def keymaps(self):
         return [{"*": '', "Keymap": v} for v in subprocess.getoutput("localectl list-keymaps --no-pager").splitlines()]
 
-    def nmtui(self, ui: Interface):
+    def nmtui(self, ui: Interface, timeout: float):
         while True:
             try:
                 ui.draw("Checking Internet connection...", 'Trying to connect to https://getfedora.org/')
-                ui.window.refresh()
-                urlopen('https://getfedora.org/', timeout=10)
+                urlopen('https://getfedora.org/', timeout=timeout)
                 return
             except:
                 ui.draw("Failed to connect!", "Do you want to open nmtui to connect to a wireless network? [y/n]")
                 while True:
-                    k = ui.window.getkey()
+                    k = ui.w.getkey()
                     if k in 'yY':
                         subprocess.run('nmtui')  #! requires dnf install NetworkManager-tui
                         break
@@ -321,9 +329,9 @@ class Wizard:
                         break
 
     @staticmethod
-    def fetch_envs_grps() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    def fetch_envs_grps() -> tuple[DS, DS]:
         with Base() as base:
-            #TODO: Option to load local repo for offline mode
+            # TODO: Option to load local repo for offline mode
             base.read_all_repos()
             base.fill_sack()
             comps = base.comps
