@@ -1,15 +1,16 @@
-import subprocess
+import argparse
 import curses
 import multiprocessing as mp
+import subprocess
+import sys
 from typing import Any, Callable
 
+import yaml
+
 from .install import install
+from .installer import Wizard
 from .tui.console import get_term_size
 from .tui.ui import Box, Entry, Interface, ScrollList, Toggle, get_mid, new_box
-from .installer import Wizard
-import sys
-import yaml
-import argparse
 
 ap = argparse.ArgumentParser()
 ap.add_argument('-c', '--chroot', type=str, help="Set custom chroot", default='/mnt', dest='chroot')
@@ -242,9 +243,8 @@ def main(window: 'curses._CursesWindow'):
     groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'NAME', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)')
     bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'NAME': 'grub'}, {'NAME': 'systemd-boot'}], 'NAME'), 'Select your bootloader\npress SPACE to select, and press ENTER to continue.')
 
-    ui.draw("Generating and saving configurations...")
-    ui.window.refresh()
-    d = {
+    ui.draw("You will see your Cappy configuration file", "If you want to edit anything, just edit it.\nWhen you finish reviewing the file, press CTRL+X, Y, then ENTER to save the file.")
+    yaml.dump({
         "install": {
             "installroot": chroot,
             "volumes": [{'uuid': disk['UUID'], 'mountpoint': disk['NEW MOUNTPOINT'], 'filesystem': disk['FSTYPE'], 'dump': bool(disk['DUMP']), 'fsck': bool(disk['FSCK'])} for disk in disks],
@@ -263,10 +263,7 @@ def main(window: 'curses._CursesWindow'):
             ],
             "bootloader": bootloader
         }
-    }
-    yaml.dump(d, open('/tmp/cappyinstall.yml', 'w+'))
-    
-    ui.draw("You will see your Cappy configuration file", "If you want to edit anything, just edit it.\nWhen you finish reviewing the file, press CTRL+X, Y, then ENTER to save the file.")
+    }, open('/tmp/cappyinstall.yml', 'w+'))
     ui.wait()
 
 

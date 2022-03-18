@@ -206,7 +206,7 @@ class Installer:
             self.nspawn(f"mount {entry['device']} {entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
 class Wizard:
     @staticmethod
-    def _lsblk():
+    def lsblk():
         parts: list[dict[str, str]] = []
         lines = subprocess.getoutput("lsblk -l").splitlines()
         lines.pop(0)
