@@ -25,7 +25,13 @@
             "type": "python",
             "request": "launch",
             "module": "libcappy",
-            "console": "externalTerminal"
+            "console": "externalTerminal",
+            "sudo": true,
+            "args": [
+                "-d",
+                "-c",
+                "${workspaceFolder}/chroot/"
+            ]
         }
     ]
 }
