@@ -73,7 +73,7 @@ lsblk = wizard.strip_lsblk(wizard.tidy_lsblk(wizard.lsblk())[1])
 def get_lsblk(): return lsblk
 
 
-def scrollList_hdl(ui: Interface, dsFn: Callable[[], DS], keyFn: Callable[[str, int], None], parseFn: Callable[[], str | list[str]], msg: str):
+def scrollList_hdl(ui: Interface, dsFn: Callable[[], DS], keyFn: Callable[[str, int], None], parseFn: Callable[[], str | list[str]], msg: str, req: bool = True):
     y, x = ui.w.getmaxyx()
     cw, table = ScrollList.build_table(dsFn())
     _y, _x = min(len(table.splitlines())+3, y-3), min(cw+4, x)
@@ -82,11 +82,12 @@ def scrollList_hdl(ui: Interface, dsFn: Callable[[], DS], keyFn: Callable[[str, 
     ui.draw(msg)
     listhdl.hdl(dsFn, keyFn)
     res = parseFn()
-    while not any(res):
-        Box(ui, 10, 40, *get_mid(y, x, 10, 40)).write('A selection is required!\nPress SPACE to try again.')
-        ui.wait(show=False)
-        listhdl.hdl(dsFn, keyFn)
-        res = parseFn()
+    if req:
+        while not any(res):
+            Box(ui, 10, 40, *get_mid(y, x, 10, 40)).write('A selection is required!\nPress SPACE to try again.')
+            ui.wait(show=False)
+            listhdl.hdl(dsFn, keyFn)
+            res = parseFn()
     return res
 
 
@@ -254,18 +255,17 @@ def main(window: 'curses._CursesWindow'):
     disks = [] if skipdisk else lsblk_hdl(ui)
     ui.draw("Waiting for dnf to finish...", "This will take a while!")
     envirns, agroups = q.get()
-    envirn = scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'NAME'), 'Select your environment\npress SPACE to select, and press ENTER to continue.')
-    groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'NAME', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)')
+    envirn = scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'ID'), 'Select your environment\npress SPACE to select, and press ENTER to continue.')
+    groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)', False)
     bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), 'Select your bootloader\npress SPACE to select, and press ENTER to continue.')
 
     ui.draw("You will see your Cappy configuration file", "If you want to edit anything, just edit it.\nWhen you finish reviewing the file, press CTRL+X, Y, then ENTER to save the file.")
     password = password.replace('"', '\\"').replace('$', '\\$')  # just in case they try to inject
-    hostname = hostname.replace('"', '\\"').replace('$', '\\$')
     yaml.dump({
         "install": {
             "installroot": chroot,
             "volumes": [{'uuid': disk['UUID'], 'mountpoint': disk['NEW MOUNTPOINT'], 'filesystem': disk['FSTYPE'], 'dump': bool(disk['DUMP']), 'fsck': bool(disk['FSCK'])} for disk in disks],
-            "packages": ([f"@^{envirn}"] if envirn else []) + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel', 'grub2-efi-x64', 'shim', 'grub2-tools-efi', 'grub2-pc'],
+            "packages": ([f"@{envirn}"] if envirn else []) + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel', 'grub2-efi-x64', 'shim', 'grub2-tools-efi', 'grub2-pc'],
             "dnf_options": {
                 "install_weak_deps": True,
                 "releasever": 36,

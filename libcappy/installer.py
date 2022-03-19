@@ -336,4 +336,4 @@ class Wizard:
             base.fill_sack()
             comps = base.comps
             assert comps != None, "dnf.Base().comps failed miserably ;("  # might be None
-            return [{'*': '', 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description or ''} for env in comps.environments_iter()], [{'*': '', 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description or ''} for grp in comps.groups_iter()]
+            return [{'*': '', 'ID': env.id, 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description or ''} for env in comps.environments_iter()], [{'*': '', 'ID': grp.id, 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description or ''} for grp in comps.groups_iter()]
