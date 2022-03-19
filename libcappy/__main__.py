@@ -17,10 +17,12 @@ ap = argparse.ArgumentParser()
 ap.add_argument('-c', '--chroot', type=str, help="Set custom chroot", default='/mnt', dest='chroot')
 ap.add_argument('-d', '--skip-disk', action='store_true', help='Skip disk selection', dest='sd')
 ap.add_argument('-t', '--timeout', type=float, help="Set network timeout", default=10, dest='timeout')
+ap.add_argument('-w', '--skip-wizard', action='store_true', help='Skip the wizard. You need to have /tmp/cappyinstall.yml', dest='sw')
 args = ap.parse_args()
 chroot = args.chroot
 skipdisk = args.sd
 timeout = args.timeout
+skipwizard = args.sw
 
 
 class DummyFile(object):
@@ -146,7 +148,7 @@ def add_user(ui: Interface) -> tuple[str, str]:
             popup(ui, "You can't leave your username blank.")
             curEn = ens[0]
             continue
-        if not re.match(r'^[a-z][-a-z0-9_]*\$', usernameEn.t):
+        if not re.match(r'[a-z][-a-z0-9_]*$', usernameEn.t):
             popup(ui, "Invalid username.")
             curEn = ens[0]
             continue
@@ -289,11 +291,12 @@ try:
 except KeyboardInterrupt:
     exit()
 
-
-main(curses.initscr())  #? curses.wrap() will handle some error, which we don't like
-curses.endwin()
-os.system('nano /tmp/cappyinstall.yml')  # subprocess will run it in the bg unfortunately
-res = input("You've reached the end of the wizard. Ready to install? [y/N] ")
+res = 'y'
+if not skipwizard:
+    main(curses.initscr())  #? curses.wrap() will handle some error, which we don't like
+    curses.endwin()
+    os.system('nano /tmp/cappyinstall.yml')  # subprocess will run it in the bg unfortunately
+    res = input("You've reached the end of the wizard. Ready to install? [y/N] ")
 if res and res in 'Yy':
     print("!! THIS WILL ERASE YOUR DATA IF NOT CONFIGURED PROPERLY !!")
     if input("Still continue? [yes] ") == 'yes':

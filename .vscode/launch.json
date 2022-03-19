@@ -30,7 +30,8 @@
             "args": [
                 "-d",
                 "-c",
-                "${workspaceFolder}/chroot/"
+                "${workspaceFolder}/chroot/",
+                "-w"
             ]
         }
     ]

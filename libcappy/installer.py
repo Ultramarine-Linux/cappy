@@ -3,7 +3,6 @@
 # Basically DNFStrap, but now in Python.
 # Copyright (C) 2022 Cappy Ishihara and contributors under the MIT License.
 
-import importlib.resources
 import logging
 import os
 import re
@@ -23,7 +22,7 @@ from .repository import Copr
 logger = logging.getLogger(__name__)
 
 
-class s(object):
+class Config(object):
     # the class for reading and writing configuration files
     def __init__(self, configfile: str):
         # read the configuration YAML file

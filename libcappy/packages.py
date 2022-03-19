@@ -1,7 +1,5 @@
-from click import progressbar
 import dnf
 import os
-import sys
 import dnf.cli.progress
 import dnf.callback
 import dnf.cli.output
