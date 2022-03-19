@@ -249,7 +249,7 @@ def main(window: 'curses._CursesWindow'):
     disks = [] if skipdisk else lsblk_hdl(ui)
     ui.draw("Waiting for dnf to finish...", "This will take a while!")
     envirns, agroups = q.get()
-    envirn: list[str] = [scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'ID'), selstr.format('environment'))]
+    envirn: list[str] = ["@"+scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'ID'), selstr.format('environment'))]
     groups = ["@"+s for s in scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), selstr.format('groups')+' (You may select multiple ones.)', False)]
     bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), selstr.format('bootloader'))
 
@@ -280,23 +280,23 @@ def main(window: 'curses._CursesWindow'):
     ui.wait()
 
 
-print("This program requires a terminal with size >= x=84, y=10")
-size = os.get_terminal_size()
-print(f"The current size is: x={size.columns}, y={size.lines}")
-print("Press Ctrl+C to stop and try again.")
-print("Press F11 to open in fullscreen.")
-print("You might also need to press and hold Fn alongside.")
-try:
-    input("Press ENTER to get to the next screen.")
-except KeyboardInterrupt:
-    exit()
-
 res = 'y'
 if not skipwizard:
+    print("This program requires a terminal with size >= x=84, y=10")
+    size = os.get_terminal_size()
+    print(f"The current size is: x={size.columns}, y={size.lines}")
+    print("Press Ctrl+C to stop and try again.")
+    print("Press F11 to open in fullscreen.")
+    print("You might also need to press and hold Fn alongside.")
+    try:
+        input("Press ENTER to get to the next screen.")
+    except KeyboardInterrupt:
+        exit()
     main(curses.initscr())  #? curses.wrap() will handle some error, which we don't like
     curses.endwin()
     os.system('nano /tmp/cappyinstall.yml')  # subprocess will run it in the bg unfortunately
     res = input("You've reached the end of the wizard. Ready to install? [y/N] ")
+p.join()
 if res and res in 'Yy':
     print("!! THIS WILL ERASE YOUR DATA IF NOT CONFIGURED PROPERLY !!")
     if input("Still continue? [yes] ") == 'yes':
