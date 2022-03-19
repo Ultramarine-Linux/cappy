@@ -23,7 +23,7 @@ from .repository import Copr
 logger = logging.getLogger(__name__)
 
 
-class Config(object):
+class s(object):
     # the class for reading and writing configuration files
     def __init__(self, configfile: str):
         # read the configuration YAML file
@@ -200,15 +200,15 @@ class Installer:
 
         # copy boot/efi/EFI/fedora/grub.cfg to boot/efi/EFI/BOOT/grub.cfg
         shutil.copy(os.path.join(self.chroot_path, 'boot/efi/EFI/fedora/grub.cfg'), os.path.join(self.chroot_path, 'boot/efi/EFI/BOOT/grub.cfg'))
-        self.nspawn(f'grubby --remove-args="rd.live.image" --update-kernel ALL')
-        self.nspawn(f'grubby --remove-args="root" --update-kernel=ALL --copy-default')
+        self.nspawn('grubby --remove-args="rd.live.image" --update-kernel ALL')
+        self.nspawn('grubby --remove-args="root" --update-kernel=ALL --copy-default')
         self.nspawn(f'grubby --add-args="root={root}" --update-kernel=ALL --copy-default')
 
-    def systemdBoot(self, root: str, boot: str = None):
+    def systemdBoot(self):
         # make /efi
         os.makedirs(os.path.join(self.chroot_path, 'boot', 'efi'), exist_ok=True)
         self.nspawn('bootctl install --boot-path=/boot --esp-path=/boot')
-        self.nspawn(f'kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz')
+        self.nspawn('kernel-install add $(uname -r) /lib/modules/$(uname -r)/vmlinuz')
         self.nspawn('dnf reinstall $(rpm -qa|grep kernel-core)')
 
     def mount(self, table: list[dict[str, str | bool]]):

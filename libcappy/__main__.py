@@ -99,7 +99,7 @@ def hostnamehdl(ui: Interface) -> str:
     while True:
         en.show(1, 1)
         en.activate()
-        if re.match(r'[^a-z]', en.t):
+        if re.match(r'[^a-zA-Z]', en.t):
             box.t = "Hostname can only contain lowercase a-z."
             box.write()
             box.w.getkey()
@@ -148,7 +148,7 @@ def add_user(ui: Interface) -> tuple[str, str]:
             del popup
             curEn = ens[0]
             continue
-        if re.match(r'[^a-z]', usernameEn.t):
+        if not re.match(r'^[a-z][-a-z0-9_]*\$', usernameEn.t):
             popup = new_box(ui, 4, 42).write("Username can only contain lowercase a-z.")
             popup.w.getkey()
             del popup
@@ -233,8 +233,8 @@ def lsblk_hdl(ui: Interface):
     has_boot_efi = [d for d in ds if d['NEW MOUNTPOINT'] == '/boot/efi']
     while not any(has_root) and any(has_boot_efi):
         msg = f'One of them has to be mounted at {chroot}/ and {chroot}/boot/efi!'
-        new_box(ui, 5, len(msg)+2).write(msg + '\nPress SPACE to try again.')
-        ui.wait(show=False)
+        new_box(ui, 4, len(msg)+2).write(msg)
+        ui.w.getkey()
         listhdl.hdl(get_lsblk, lsblk_keyhdl)
         ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
         has_root = [d for d in ds if d['NEW MOUNTPOINT'] == '/']
@@ -258,7 +258,7 @@ def main(window: 'curses._CursesWindow'):
     ui.draw("Waiting for dnf to finish...", "This will take a while!")
     envirns, agroups = q.get()
     envirn: list[str] = [scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'ID'), selstr.format('environment'))]
-    groups = [*scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), selstr.format('groups')+' (You may select multiple ones.)', False)]
+    groups = ["@"+s for s in scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), selstr.format('groups')+' (You may select multiple ones.)', False)]
     bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), selstr.format('bootloader'))
 
 
