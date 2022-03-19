@@ -246,27 +246,29 @@ def main(window: 'curses._CursesWindow'):
     ui.draw("Welcome to Ultramarine Installer!", "This TUI wizard will guide you through the installation.")
     ui.wait()
 
-    locale = scrollList_hdl(ui, *gen_scrollList_hdl(locales, 'Locale'), 'Select your locale\npress SPACE to select, and press ENTER to continue.')
-    keymap = scrollList_hdl(ui, *gen_scrollList_hdl(keymaps, 'Keymap'), 'Select your keymap\npress SPACE to select, and press ENTER to continue.')
+    selstr = 'Select your {}\npress SPACE to select, and press ENTER to continue.{}'
+
+    locale = scrollList_hdl(ui, *gen_scrollList_hdl(locales, 'Locale'), selstr.format('locale'))
+    keymap = scrollList_hdl(ui, *gen_scrollList_hdl(keymaps, 'Keymap'), selstr.format('keymap'))
     wizard.nmtui(ui, timeout)
     hostname = hostnamehdl(ui)
     username, password = add_user(ui)
     disks = [] if skipdisk else lsblk_hdl(ui)
     ui.draw("Waiting for dnf to finish...", "This will take a while!")
     envirns, agroups = q.get()
-    envirn = scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'ID'), 'Select your environment\npress SPACE to select, and press ENTER to continue.')
-    groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)', False)
-    bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), 'Select your bootloader\npress SPACE to select, and press ENTER to continue.')
+    envirn: list[str] = [scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'ID'), selstr.format('environment'))]
+    groups = [*scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), selstr.format('groups', ' (You may select multiple ones.)'), False)]
+    bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), selstr.format('bootloader'))
+
 
     ui.draw("You will see your Cappy configuration file", "If you want to edit anything, just edit it.\nWhen you finish reviewing the file, press CTRL+X, Y, then ENTER to save the file.")
+    ifgrub = ['grub2-efi-x64', 'shim', 'grub2-tools-efi', 'grub2-pc'] if bootloader == 'grub' else []
     password = password.replace('"', '\\"').replace('$', '\\$')  # just in case they try to inject
     yaml.dump({
         "install": {
             "installroot": chroot,
             "volumes": [{'uuid': disk['UUID'], 'mountpoint': disk['NEW MOUNTPOINT'], 'filesystem': disk['FSTYPE'], 'dump': bool(disk['DUMP']), 'fsck': bool(disk['FSCK'])} for disk in disks],
-            "packages": ([f"@{envirn}"] if envirn else [])
-            + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel', 'shim']
-            + (['grub2-efi-x64', 'grub2-tools-efi', 'grub2-pc'] if bootloader == 'grub' else []),
+            "packages": envirn + groups + ['@core', 'nano', 'dnf', 'kernel'] + ifgrub,
             "dnf_options": {
                 "install_weak_deps": True,
                 "releasever": 36,
