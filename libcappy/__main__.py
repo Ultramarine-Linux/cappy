@@ -11,7 +11,7 @@ import yaml
 from .common import DS, Q_T
 from .install import install
 from .installer import Wizard
-from .ui import Box, Entry, Interface, ScrollList, Toggle, get_mid, new_box
+from .ui import Box, Entry, Interface, ScrollList, Toggle, get_mid, new_box, popup
 
 ap = argparse.ArgumentParser()
 ap.add_argument('-c', '--chroot', type=str, help="Set custom chroot", default='/mnt', dest='chroot')
@@ -100,7 +100,7 @@ def hostnamehdl(ui: Interface) -> str:
         en.show(1, 1)
         en.activate()
         if re.match(r'[^a-zA-Z]', en.t):
-            box.t = "Hostname can only contain lowercase a-z."
+            box.t = "Hostname can only contain a-z, A-Z."
             box.write()
             box.w.getkey()
             continue
@@ -143,33 +143,23 @@ def add_user(ui: Interface) -> tuple[str, str]:
             curEn.activate(keyhdl, invis=curEn != usernameEn)
             continue
         if not usernameEn.t:
-            popup = new_box(ui, 4, 38).write("You can't leave your username blank.")
-            popup.w.getkey()
-            del popup
+            popup(ui, "You can't leave your username blank.")
             curEn = ens[0]
             continue
         if not re.match(r'^[a-z][-a-z0-9_]*\$', usernameEn.t):
-            popup = new_box(ui, 4, 42).write("Username can only contain lowercase a-z.")
-            popup.w.getkey()
-            del popup
+            popup(ui, "Invalid username.")
             curEn = ens[0]
             continue
         if not passwordEn.t:
-            popup = new_box(ui, 4, 38).write("You can't leave you password blank.")
-            popup.w.getkey()
-            del popup
+            popup(ui, "You can't leave you password blank.")
             curEn = ens[1]
             continue
         if not retypeEn.t:
-            popup = new_box(ui, 4, 30).write("Please retype your password.")
-            popup.w.getkey()
-            del popup
+            popup(ui, "Please retype your password.")
             curEn = ens[2]
             continue
         if passwordEn.t != retypeEn.t:
-            popup = new_box(ui, 4, 27).write("Password is not the same.")
-            popup.w.getkey()
-            del popup
+            popup(ui, "Password is not the same.")
             curEn = ens[1]
             continue
         return usernameEn.t, passwordEn.t
@@ -305,6 +295,6 @@ curses.endwin()
 os.system('nano /tmp/cappyinstall.yml')  # subprocess will run it in the bg unfortunately
 res = input("You've reached the end of the wizard. Ready to install? [y/N] ")
 if res and res in 'Yy':
-    print("!! THIS WILL ERASE YOUR DATA IF NOT CONFIGURED PROPERLY!!")
+    print("!! THIS WILL ERASE YOUR DATA IF NOT CONFIGURED PROPERLY !!")
     if input("Still continue? [yes] ") == 'yes':
         install()

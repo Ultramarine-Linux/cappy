@@ -292,3 +292,8 @@ def mkwin(win: 'curses._CursesWindow', h: int, w: int, y: int, x: int):
                 term_size = win.getmaxyx()
                 raise ValueError(f"Failed to create window:\n{h, w, y, x=}\nMaybe {term_size=} is too small?") from err
         raise
+
+def popup(ui: Interface, s: str):
+    h = len(s.splitlines()) + 3
+    w = max(len(l) for l in s.splitlines()) + 2
+    new_box(ui, h, w).write(s).w.getkey()

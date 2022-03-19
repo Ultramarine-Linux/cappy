@@ -16,9 +16,9 @@ def install():
     chroot: str = installer.cfgparse.config['installroot']
     bootloader: str = installer.cfgparse.config['bootloader']
     if bootloader == 'grub':
-        installer.grubGen(chroot)
+        installer.grubGen()
     elif bootloader == 'systemd-boot':
-        installer.systemdBoot(chroot)
+        installer.systemdBoot()
     else:
         print(f"ERROR: Bootloader '{bootloader}' not supported")
         print(f"ERROR: You have to install one to boot Ultramarine Linux!")
