@@ -55,6 +55,7 @@ setup(
     entry_points = {
         'console_scripts': [
             'cappy = libcappy.cli.__main__:main',
+            'ultramarine-install-tui = libcappy.__main__:main',
         ]
     },
     cmdclass={
