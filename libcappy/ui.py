@@ -25,10 +25,10 @@ class Interface:
         [self.w.addstr('\n  ' + l) for l in desc.splitlines()]
         self.w.refresh()
 
-    def wait(self, wait_for: str = ' ', show: bool = True):
+    def wait(self, show: bool = True):
         if show:
-            self.w.addstr(self.w.getmaxyx()[0] - 2, 0, self.mid(f"--- Press {wait_for} to continue ---"))
-        while self.w.getkey() != wait_for:
+            self.w.addstr(self.w.getmaxyx()[0] - 2, 0, self.mid(f"--- Press SPACE to continue ---"))
+        while self.w.getkey() != ' ':
             pass
 
     def redraw(self):
@@ -42,9 +42,10 @@ class Box:
     t: str = ""
 
     def __init__(self, ui: Interface, h: int, w: int, y: int, x: int):
+        curses.update_lines_cols()
         self.l = h
         self.c = w
-        self.w = ui.w.subwin(h, w, y, x)
+        self.w = mkwin(ui.w, h, w, y, x)
         self.ui = ui
         self.w.keypad(True)
 
@@ -54,9 +55,7 @@ class Box:
         rows: list[str] = []
         for row in self.t.splitlines():
             rows.extend(splitstr(row, self.c-2))
-        row = rows.pop(0) if any(rows) else ''
-        self.w.addstr('║' + row + ' '*(self.c-2-len(row)) + '║', attr)
-        i = 2
+        i = 1
         while i < self.l-2:
             row = rows.pop(0) if any(rows) else ''
             self.w.addstr("║" + row + ' '*(self.c-2-len(row)) + '║', attr)
@@ -109,6 +108,7 @@ class Entry:
     invis = False
 
     def __init__(self, box: Box, length: int):
+        curses.update_lines_cols()
         self.length = length
         self.box = box
         curses.start_color()
@@ -140,6 +140,7 @@ class Entry:
             match k:
                 case '\n': break
                 case 'KEY_ENTER': break
+                case '\t': continue
                 case 'KEY_LEFT': tp = max(tp - 1, 0)
                 case 'KEY_RIGHT': tp = min(tp + 1, len(self.t))
                 case 'KEY_BACKSPACE':
@@ -163,7 +164,7 @@ class Entry:
                         continue
                     self.t = self.t[:tp] + k + self.t[tp:]
                     tp += 1
-            self.box.w.addstr(*self.p, '*'*len(self.t) if invis else self.t + ' '*(self.length-len(self.t)), curses.color_pair(11))
+            self.box.w.addstr(*self.p, ('*'*len(self.t) if invis else self.t) + ' '*(self.length-len(self.t)), curses.color_pair(11))
             self.box.w.move(y, x+tp)
             self.box.w.refresh()
         curses.curs_set(0)
@@ -173,6 +174,7 @@ class ScrollList:
     sels: list[str] = []
 
     def __init__(self, box: Box):
+        curses.update_lines_cols()
         self.box = box
         curses.start_color()
         curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
@@ -199,7 +201,8 @@ class ScrollList:
         w.refresh()
 
     def find(self, ds: DS, sel: int) -> int:
-        box = Box(self.box.ui, 4, 50, *get_mid(*self.box.w.getmaxyx(), 4, 50))
+        curses.update_lines_cols()
+        box = Box(self.box.ui, 4, 50, *get_mid(*self.box.ui.w.getmaxyx(), 4, 50))
         box.write("FIND: ")
         en = box.add_entry(42)
         en.show(1, 7)
@@ -214,7 +217,7 @@ class ScrollList:
         if any(found):
             return found[0]
         else:
-            box.t = "Can't find that one!"
+            box.t = "Not found!"
             box.write()
             box.w.getkey()
             return sel
@@ -278,3 +281,14 @@ def new_box(ui: Interface, h: int, w: int):
 
 def splitstr(s: str, n: int):
     return [s[i:i + n] for i in range(0, len(s), n)]
+
+def mkwin(win: 'curses._CursesWindow', h: int, w: int, y: int, x: int):
+    try:
+        return win.subwin(h, w, y, x)
+    except BaseException as err:
+        curses.endwin()
+        if type(err).__name__ == 'error':  # _curses.error
+            if str(err) == 'curses function returned NULL':
+                term_size = win.getmaxyx()
+                raise ValueError(f"Failed to create window:\n{h, w, y, x=}\nMaybe {term_size=} is too small?") from err
+        raise

@@ -1,6 +1,8 @@
 import argparse
 import curses
 import multiprocessing as mp
+import os
+import re
 import subprocess
 import sys
 from typing import Any, Callable
@@ -74,8 +76,8 @@ def get_lsblk(): return lsblk
 def scrollList_hdl(ui: Interface, dsFn: Callable[[], DS], keyFn: Callable[[str, int], None], parseFn: Callable[[], str | list[str]], msg: str):
     y, x = ui.w.getmaxyx()
     cw, table = ScrollList.build_table(dsFn())
-    y, _x = min(table.count('\n'), y), min(cw, x)
-    box = Box(ui, y-5, _x, 3, max((x-_x)//2-1, 0))
+    _y, _x = min(len(table.splitlines())+3, y-3), min(cw+4, x)
+    box = Box(ui, _y, _x, 3, max((x-_x)//2-1, 0))
     listhdl = ScrollList(box)
     ui.draw(msg)
     listhdl.hdl(dsFn, keyFn)
@@ -97,6 +99,11 @@ def hostnamehdl(ui: Interface) -> str:
     while True:
         en.show(1, 1)
         en.activate()
+        if re.match(r'[^a-z]', en.t):
+            box.t = "Hostname can only contain lowercase a-z."
+            box.write()
+            box.w.getkey()
+            continue
         if en.t:
             return en.t
         box.t = "You can't leave that blank!"
@@ -141,6 +148,12 @@ def add_user(ui: Interface) -> tuple[str, str]:
             del popup
             curEn = ens[0]
             continue
+        if re.match(r'[^a-z]', usernameEn.t):
+            popup = new_box(ui, 4, 42).write("Username can only contain lowercase a-z.")
+            popup.w.getkey()
+            del popup
+            curEn = ens[0]
+            continue
         if not passwordEn.t:
             popup = new_box(ui, 4, 38).write("You can't leave you password blank.")
             popup.w.getkey()
@@ -166,11 +179,12 @@ def lsblk_hdl(ui: Interface):
     def lsblk_keyhdl(k: str, sel: int):
         if k == ' ':
             global curEn
-            box = new_box(ui, 7, 100)
+            width = min(ui.w.getmaxyx()[1], 100)
+            box = new_box(ui, 7, width)
             f = f"mount /dev/{lsblk[sel]['NAME']} {chroot}"
             box.write(f'{f}\n-o \ndump: \nfsck: ')
-            newMpEn = box.add_entry(100 - len(f) - 2)
-            optionEn = box.add_entry(94)
+            newMpEn = box.add_entry(width - len(f) - 2)
+            optionEn = box.add_entry(width-6)
             newMpEn.t = lsblk[sel]['NEW MOUNTPOINT']
             optionEn.t = lsblk[sel]['OPTIONS']
             newMpEn.show(1, 1+len(f))
@@ -209,15 +223,16 @@ def lsblk_hdl(ui: Interface):
 
     y, x = ui.w.getmaxyx()
     cw, table = ScrollList.build_table(get_lsblk())
-    _y, _x = min(table.count('\n')+4, y-7), min(cw+4, x)
-    box = Box(ui, _y if _y <= y-10 else y-10, _x, 8, (x-cw)//2-1)
+    _y, _x = min(len(table.splitlines())+3, y-3), min(cw+4, x)
+    box = Box(ui, _y, _x, 3, max((x-_x)//2-1, 0))
     listhdl = ScrollList(box)
     ui.draw("Set mountpoints", f"Press SPACE to set mountpoint and options.\nPress ENTER when you're done.\n(it starts with {chroot})")
     listhdl.hdl(get_lsblk, lsblk_keyhdl)
     ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
     has_root = [d for d in ds if d['NEW MOUNTPOINT'] == '/']
     while not any(has_root):
-        new_box(ui, 5, 27).write('A selection is required!\nPress SPACE to try again.')
+        msg = f'One of them has to be mounted at {chroot}/!'
+        new_box(ui, 5, len(msg)+2).write(msg + '\nPress SPACE to try again.')
         ui.wait(show=False)
         listhdl.hdl(get_lsblk, lsblk_keyhdl)
         ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
@@ -241,9 +256,11 @@ def main(window: 'curses._CursesWindow'):
     envirns, agroups = q.get()
     envirn = scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'NAME'), 'Select your environment\npress SPACE to select, and press ENTER to continue.')
     groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'NAME', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)')
-    bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'NAME': 'grub'}, {'NAME': 'systemd-boot'}], 'NAME'), 'Select your bootloader\npress SPACE to select, and press ENTER to continue.')
+    bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), 'Select your bootloader\npress SPACE to select, and press ENTER to continue.')
 
     ui.draw("You will see your Cappy configuration file", "If you want to edit anything, just edit it.\nWhen you finish reviewing the file, press CTRL+X, Y, then ENTER to save the file.")
+    password = password.replace('"', '\\"').replace('$', '\\$')  # just in case they try to inject
+    hostname = hostname.replace('"', '\\"').replace('$', '\\$')
     yaml.dump({
         "install": {
             "installroot": chroot,
@@ -258,8 +275,8 @@ def main(window: 'curses._CursesWindow'):
             "postinstall": [
                 f'localectl set-locale {locale}',
                 f'localectl set-keymap {keymap}',
-                f'hostnamectl hostname {hostname}',
-                f'useradd {username} -p $(mkpasswd {password}) -m'
+                f'hostnamectl hostname "{hostname}"',
+                f'useradd {username} -p $(mkpasswd "{password}") -m'
             ],
             "bootloader": bootloader
         }
@@ -267,14 +284,23 @@ def main(window: 'curses._CursesWindow'):
     ui.wait()
 
 
+print("This program requires a terminal with size >= x=84, y=10")
+size = os.get_terminal_size()
+print(f"The current size is: x={size.columns}, y={size.lines}")
+print("Press Ctrl+C to stop and try again.")
 print("Press F11 to open in fullscreen.")
 print("You might also need to press and hold Fn alongside.")
-input("Press ENTER to get to the next screen.")
+try:
+    input("Press ENTER to get to the next screen.")
+except KeyboardInterrupt:
+    exit()
 
 
-curses.wrapper(main)
-subprocess.run('nano /tmp/cappyinstall.yml')
-if input("You've reached the end of the wizard. Ready to install? [y/N]") in 'Yy':
+main(curses.initscr())  #? curses.wrap() will handle some error, which we don't like
+curses.endwin()
+os.system('nano /tmp/cappyinstall.yml')  # subprocess will run it in the bg unfortunately
+res = input("You've reached the end of the wizard. Ready to install? [y/N] ")
+if res and res in 'Yy':
     print("!! THIS WILL ERASE YOUR DATA IF NOT CONFIGURED PROPERLY!!")
-    if input("Still continue? [yes]") == 'yes':
+    if input("Still continue? [yes] ") == 'yes':
         install()
