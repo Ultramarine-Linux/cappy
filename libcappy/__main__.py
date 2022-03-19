@@ -3,7 +3,6 @@ import curses
 import multiprocessing as mp
 import os
 import re
-import subprocess
 import sys
 from typing import Any, Callable
 
@@ -265,7 +264,9 @@ def main(window: 'curses._CursesWindow'):
         "install": {
             "installroot": chroot,
             "volumes": [{'uuid': disk['UUID'], 'mountpoint': disk['NEW MOUNTPOINT'], 'filesystem': disk['FSTYPE'], 'dump': bool(disk['DUMP']), 'fsck': bool(disk['FSCK'])} for disk in disks],
-            "packages": ([f"@{envirn}"] if envirn else []) + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel', 'grub2-efi-x64', 'shim', 'grub2-tools-efi', 'grub2-pc'],
+            "packages": ([f"@{envirn}"] if envirn else [])
+            + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel', 'shim']
+            + (['grub2-efi-x64', 'grub2-tools-efi', 'grub2-pc'] if bootloader == 'grub' else []),
             "dnf_options": {
                 "install_weak_deps": True,
                 "releasever": 36,
