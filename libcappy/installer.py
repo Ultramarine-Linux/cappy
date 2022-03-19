@@ -127,11 +127,11 @@ class Installer:
         subprocess.run([
             'systemd-nspawn',
             '--quiet',
+            '--capability=CAP_SYS_ADMIN,CAP_SYS_RAWIO',
             '-D',
             self.chroot_path,
             '/bin/bash',
             '-c',
-            '--capability=CAP_SYS_ADMIN,CAP_SYS_RAWIO',
             command
         ])
 
@@ -191,8 +191,8 @@ class Installer:
         Configures GRUB for the chroot.
         """
         self.logger.info('Configuring GRUB')
-        # use importlib.resources to load templates/grub.cfg
-        with importlib.resources.path('libcappy', 'templates/grub.cfg') as template:
+        # open the template from __file__/templates/grub.cfg
+        with open(os.path.join(os.path.dirname(__file__), 'templates', 'grub.cfg'), 'r') as template:
             with open(os.path.join(self.chroot_path, 'boot/efi/EFI/fedora/grub.cfg'), 'w') as f:
                 # replace @UUID@ with the UUID of the root partition then write to file
                 f.write(template.read().replace('@UUID@', root))
