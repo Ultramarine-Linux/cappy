@@ -12,11 +12,11 @@ def install():
     print("genfstab...")
     installer.fstab(fstab)
     print("Installing bootloader...")
-    bootloader = installer.cfgparse.config.config['bootloader']
+    bootloader = installer.cfgparse.config['install']['bootloader']
     if bootloader == 'grub':
-        installer.grubGen(installer.cfgparse.config.config['installroot'])
+        installer.grubGen(installer.cfgparse.config['install']['installroot'])
     elif bootloader == 'systemd-boot':
-        installer.systemdBoot(installer.cfgparse.config.config['installroot'])
+        installer.systemdBoot(installer.cfgparse.config['install']['installroot'])
     else:
         print(f"ERROR: Bootloader '{bootloader}' not supported")
         print(f"ERROR: You have to install one to boot Ultramarine Linux!")
