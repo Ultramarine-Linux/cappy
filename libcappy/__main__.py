@@ -230,8 +230,9 @@ def lsblk_hdl(ui: Interface):
     listhdl.hdl(get_lsblk, lsblk_keyhdl)
     ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
     has_root = [d for d in ds if d['NEW MOUNTPOINT'] == '/']
-    while not any(has_root):
-        msg = f'One of them has to be mounted at {chroot}/!'
+    has_boot_efi = [d for d in ds if d['NEW MOUNTPOINT'] == '/boot/efi']
+    while not any(has_root) and any(has_boot_efi):
+        msg = f'One of them has to be mounted at {chroot}/ and {chroot}/boot/efi!'
         new_box(ui, 5, len(msg)+2).write(msg + '\nPress SPACE to try again.')
         ui.wait(show=False)
         listhdl.hdl(get_lsblk, lsblk_keyhdl)
@@ -246,7 +247,7 @@ def main(window: 'curses._CursesWindow'):
     ui.draw("Welcome to Ultramarine Installer!", "This TUI wizard will guide you through the installation.")
     ui.wait()
 
-    selstr = 'Select your {}\npress SPACE to select, and press ENTER to continue.{}'
+    selstr = 'Select your {}\npress SPACE to select, and press ENTER to continue.'
 
     locale = scrollList_hdl(ui, *gen_scrollList_hdl(locales, 'Locale'), selstr.format('locale'))
     keymap = scrollList_hdl(ui, *gen_scrollList_hdl(keymaps, 'Keymap'), selstr.format('keymap'))
@@ -257,7 +258,7 @@ def main(window: 'curses._CursesWindow'):
     ui.draw("Waiting for dnf to finish...", "This will take a while!")
     envirns, agroups = q.get()
     envirn: list[str] = [scrollList_hdl(ui, *gen_scrollList_hdl(envirns, 'ID'), selstr.format('environment'))]
-    groups = [*scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), selstr.format('groups', ' (You may select multiple ones.)'), False)]
+    groups = [*scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), selstr.format('groups')+' (You may select multiple ones.)', False)]
     bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), selstr.format('bootloader'))
 
 

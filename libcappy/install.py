@@ -1,3 +1,4 @@
+import os
 from libcappy.installer import Installer
 
 
@@ -12,15 +13,17 @@ def install():
     print("genfstab...")
     installer.fstab(fstab)
     print("Installing bootloader...")
-    bootloader = installer.cfgparse.config['bootloader']
+    chroot: str = installer.cfgparse.config['installroot']
+    bootloader: str = installer.cfgparse.config['bootloader']
     if bootloader == 'grub':
-        installer.grubGen(installer.cfgparse.config['installroot'])
+        installer.grubGen(chroot)
     elif bootloader == 'systemd-boot':
-        installer.systemdBoot(installer.cfgparse.config['installroot'])
+        installer.systemdBoot(chroot)
     else:
         print(f"ERROR: Bootloader '{bootloader}' not supported")
         print(f"ERROR: You have to install one to boot Ultramarine Linux!")
     print("Running post-install scripts...")
     installer.postInstall()
+    os.remove(os.path.join(chroot, 'machine-id'))
 
     print("Ultramarine Linux has been installed.")

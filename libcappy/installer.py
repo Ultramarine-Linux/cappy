@@ -186,7 +186,7 @@ class Installer:
                 f.write(f'{entry["fsck"]}\n')
         self.logger.debug('Wrote fstab')
 
-    def grubGen(self, root: str, boot: str = None):
+    def grubGen(self):
         """[summary]
         Configures GRUB for the chroot.
         """
@@ -195,6 +195,7 @@ class Installer:
         with open(os.path.join(os.path.dirname(__file__), 'templates', 'grub.cfg'), 'r') as template:
             with open(os.path.join(self.chroot_path, 'boot/efi/EFI/fedora/grub.cfg'), 'w') as f:
                 # replace @UUID@ with the UUID of the root partition then write to file
+                root: str = [d for d in self.cfgparse.config['install']['volumes'] if d['mountpoint'] == '/'][0]['uuid']
                 f.write(template.read().replace('@UUID@', root))
 
         # copy boot/efi/EFI/fedora/grub.cfg to boot/efi/EFI/BOOT/grub.cfg
