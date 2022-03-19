@@ -259,13 +259,18 @@ def main(window: 'curses._CursesWindow'):
     groups = scrollList_hdl(ui, *gen_scrollList_hdl(agroups, 'ID', True), 'Select your groups\npress SPACE to select, and press ENTER to continue. (You may select multiple ones.)', False)
     bootloader = scrollList_hdl(ui, *gen_scrollList_hdl([{'*': '', 'NAME': 'grub'}, {'*': '', 'NAME': 'systemd-boot'}], 'NAME'), 'Select your bootloader\npress SPACE to select, and press ENTER to continue.')
 
+    if bootloader == 'grub':
+        ifgrub = ['grub2-efi-x64', 'shim', 'grub2-tools-efi', 'grub2-pc']
+    else:
+        ifgrub = []
+
     ui.draw("You will see your Cappy configuration file", "If you want to edit anything, just edit it.\nWhen you finish reviewing the file, press CTRL+X, Y, then ENTER to save the file.")
     password = password.replace('"', '\\"').replace('$', '\\$')  # just in case they try to inject
     yaml.dump({
         "install": {
             "installroot": chroot,
             "volumes": [{'uuid': disk['UUID'], 'mountpoint': disk['NEW MOUNTPOINT'], 'filesystem': disk['FSTYPE'], 'dump': bool(disk['DUMP']), 'fsck': bool(disk['FSCK'])} for disk in disks],
-            "packages": ([f"@{envirn}"] if envirn else []) + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel', 'grub2-efi-x64', 'shim', 'grub2-tools-efi', 'grub2-pc'],
+            "packages": ([f"@{envirn}"] if envirn else []) + [f"@{g}" for g in groups] + ['@core', 'nano', 'dnf', 'kernel'] + ifgrub,
             "dnf_options": {
                 "install_weak_deps": True,
                 "releasever": 36,
