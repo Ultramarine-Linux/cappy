@@ -305,7 +305,11 @@ class Wizard:
 
     def locales(self):
         #! fix when build
-        return subprocess.getoutput(os.path.join(os.path.dirname(__file__), 'parse_locales/target/release/cappy_parse_locales'))
+        # Temporary fix, checks if local build exists and if so, uses it, else use the system one
+        if os.path.exists(os.path.join(os.path.dirname(__file__), 'parse_locales/target/release/cappy_parse_locales')):
+            return subprocess.getoutput(os.path.join(os.path.dirname(__file__), 'parse_locales/target/release/cappy_parse_locales'))
+        else:
+            return subprocess.getoutput(os.path.join("/usr/bin/cappy_parse_locales"))
 
     def keymaps(self):
         return [{"*": '', "Keymap": v} for v in subprocess.getoutput("localectl list-keymaps --no-pager").splitlines()]
