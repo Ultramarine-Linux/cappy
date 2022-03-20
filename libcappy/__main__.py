@@ -166,7 +166,7 @@ def add_user(ui: Interface) -> tuple[str, str]:
         return usernameEn.t, passwordEn.t
 
 
-def lsblk_hdl(ui: Interface):
+def lsblk_hdl(ui: Interface) -> list[dict[str, str]]:
     def lsblk_keyhdl(k: str, sel: int):
         if k == ' ':
             global curEn
@@ -266,12 +266,12 @@ def main(window: 'curses._CursesWindow'):
                 "exclude": 'fedora-release-common'
             },
             "postinstall": [
-                f'localectl set-locale {locale}',
-                f'localectl set-keymap {keymap}',
-                f'hostnamectl hostname "{hostname}"',
                 f'useradd {username} -p $(mkpasswd "{password}") -m'
             ],
-            "bootloader": bootloader
+            "bootloader": bootloader,
+            "locale": locale,
+            "keymap": keymap,
+            "hostname": hostname
         }
     }, open('/tmp/cappyinstall.yml', 'w+'))
     ui.wait()

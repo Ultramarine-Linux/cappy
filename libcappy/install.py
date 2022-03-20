@@ -22,6 +22,8 @@ def install():
     else:
         print(f"ERROR: Bootloader '{bootloader}' not supported")
         print(f"ERROR: You have to install one to boot Ultramarine Linux!")
+    print("Running systemd-firstboot")
+    installer.systemd_firstboot()
     print("Running post-install scripts...")
     installer.postInstall()
     os.remove(os.path.join(chroot, 'machine-id'))

@@ -188,6 +188,9 @@ class Installer:
             os.system(f'mkdir -p {path}')
             os.system(f"mount {entry['device']} {path}" + (f" -o {entry['opts'] or 'defaults'}"))
 
+    def systemd_firstboot(self):
+        root, keymap, locale, hostname = self.config['installroot'], self.config['keymap'], self.config['locale'], self.config['hostname']
+        os.system(f'systemd-firstboot --root={root} --locale={locale} --keymap={keymap} --hostname="{hostname}"')
 
 class Wizard:
     @staticmethod
@@ -313,4 +316,4 @@ class Wizard:
             base.fill_sack()
             comps = base.comps
             assert comps != None, "dnf.Base().comps failed miserably ;("  # might be None
-            return [{'*': '', 'ID': env.id, 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description or ''} for env in comps.environments_iter()], [{'*': '', 'ID': grp.id, 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description or ''} for grp in comps.groups_iter()]
+            return [{'*': '', 'ID': env.id, 'NAME': env.ui_name, 'DESCRIPTION': env.ui_description or ''} for env in comps.environments_iter()], [{'*': '', 'ID': grp.id, 'NAME': grp.ui_name, 'DESCRIPTION': grp.ui_description or ''} for grp in comps.groups_iter() if grp.id != 'core']
