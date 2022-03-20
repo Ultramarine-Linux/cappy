@@ -270,7 +270,7 @@ def main(window: 'curses._CursesWindow'):
                 "exclude": 'fedora-release-common'
             },
             "postinstall": [
-                f'useradd {username} -p $(mkpasswd "{password}") -m'
+                f'useradd {username} -p $(mkpasswd "{password}") -m',
             ],
             "bootloader": bootloader,
             "locale": locale,

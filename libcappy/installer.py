@@ -132,6 +132,11 @@ class Installer:
         Runs the post-installation commands.
         """
         self.logger.info('Running post-installation commands')
+        self.nspawn('systemctl disable auditd')
+        self.nspawn('systemctl enable dbus')
+        self.nspawn('systemctl enable systemd-resolve')
+        self.nspawn('systemctl enable NetworkManager')
+        self.nspawn('setenforce 0')
         for command in self.config['postinstall']:
             self.nspawn(command)
 
