@@ -185,6 +185,7 @@ class Installer:
         chroot = self.config['installroot']
         for entry in table:
             path: str = os.path.join(chroot, entry['mountpoint'])
+            os.system(f'mkdir -p {path}')
             os.system(f"mount {entry['device']} {path}" + (f" -o {entry['opts']}" if entry['opts'] else ''))
 
 
