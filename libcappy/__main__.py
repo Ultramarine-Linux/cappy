@@ -14,7 +14,7 @@ from .installer import Wizard
 from .ui import Box, Entry, Interface, ScrollList, Toggle, get_mid, new_box, popup
 
 ap = argparse.ArgumentParser()
-ap.add_argument('-c', '--chroot', type=str, help="Set custom chroot", default='/mnt', dest='chroot')
+ap.add_argument('-c', '--chroot', type=str, help="Set custom chroot (must ends with /)", default='/mnt/', dest='chroot')
 ap.add_argument('-d', '--skip-disk', action='store_true', help='Skip disk selection', dest='sd')
 ap.add_argument('-t', '--timeout', type=float, help="Set network timeout", default=10, dest='timeout')
 ap.add_argument('-w', '--skip-wizard', action='store_true', help='Skip the wizard. You need to have /tmp/cappyinstall.yml', dest='sw')
