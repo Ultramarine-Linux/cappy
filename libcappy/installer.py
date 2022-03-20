@@ -212,7 +212,7 @@ class Installer:
 
     def mount(self, table: list[dict[str, str | bool]]):
         for entry in table:
-            self.nspawn(f"mount {entry['device']} {self.cfgparse.config['installroot']}{entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
+            subprocess.run(f"mount {entry['device']} {self.cfgparse.config['installroot']}{entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
 
 
 class Wizard:

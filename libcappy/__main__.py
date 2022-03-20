@@ -38,7 +38,6 @@ def th_envs_grps(q: Q_T):
 
 q: Q_T = mp.Queue()
 p = mp.Process(target=th_envs_grps, args=(q, ))
-p.start()
 
 
 wizard = Wizard()
@@ -280,6 +279,7 @@ def main(window: 'curses._CursesWindow'):
 
 res = 'y'
 if not skipwizard:
+    p.start()
     print("This program requires a terminal with size >= x=84, y=10")
     size = os.get_terminal_size()
     print(f"The current size is: x={size.columns}, y={size.lines}")
