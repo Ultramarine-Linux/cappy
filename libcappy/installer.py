@@ -134,9 +134,10 @@ class Installer:
         self.logger.info('Running post-installation commands')
         self.nspawn('systemctl disable auditd')
         self.nspawn('systemctl enable dbus')
-        self.nspawn('systemctl enable systemd-resolve')
+        self.nspawn('systemctl enable systemd-resolved')
         self.nspawn('systemctl enable NetworkManager')
         self.nspawn('setenforce 0')
+        self.nspawn(f"sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' {os.path.join(self.config['installroot'], 'etc/selinux/config'])}")
         for command in self.config['postinstall']:
             self.nspawn(command)
 
