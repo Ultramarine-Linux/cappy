@@ -184,7 +184,7 @@ class Installer:
     def mount(self, table: list[dict[str, str | bool]]):
         chroot = self.config['installroot']
         for entry in table:
-            path: str = os.path.join(chroot, entry['mountpoint'])
+            path: str = os.path.join(chroot, entry['mountpoint'][1:])
             os.system(f'mkdir -p {path}')
             os.system(f"mount {entry['device']} {path}" + (f" -o {entry['opts'] or 'defaults'}"))
 
