@@ -66,7 +66,7 @@ class CfgParser:
                 entry['device'] = volume['device']
             entry['mountpoint'] = volume['mountpoint']
             entry['filesystem'] = volume['filesystem']
-            entry['opts'] = volume.get('opts', 'defaults')
+            entry['opts'] = volume.get('opts', 'defaults') or 'defaults'
             entry['dump'] = volume.get('dump', False)
             entry['fsck'] = volume.get('fsck', False)
             fstab.append(entry)
@@ -151,7 +151,7 @@ class Installer:
                 f.write(f'{entry["device"]}\t')
                 f.write(f'{entry["mountpoint"]}\t')
                 f.write(f'{entry["filesystem"]}\t')
-                f.write(f'{entry["opts"]}\t')
+                f.write(f'{entry["opts"] or "defaults"}\t')
                 f.write(f"{'1' if entry['dump'] else '0'}\t")
                 f.write(f"{'1' if entry['fsck'] else '0'}\t")
         self.logger.debug('Wrote fstab')
@@ -186,7 +186,7 @@ class Installer:
         for entry in table:
             path: str = os.path.join(chroot, entry['mountpoint'])
             os.system(f'mkdir -p {path}')
-            os.system(f"mount {entry['device']} {path}" + (f" -o {entry.get('opts', 'defaults')}"))
+            os.system(f"mount {entry['device']} {path}" + (f" -o {entry['opts'] or 'defaults'}"))
 
 
 class Wizard:
