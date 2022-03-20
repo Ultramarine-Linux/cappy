@@ -178,7 +178,10 @@ class Installer:
         self.nspawn('grubby --remove-args="rd.live.image" --update-kernel ALL')
         self.nspawn('grubby --remove-args="root" --update-kernel=ALL --copy-default')
         self.nspawn(f'grubby --add-args="root={root}" --update-kernel=ALL --copy-default')
-        os.system(f"sudo mount ")
+        os.system(f'mount --bind /etc/resolv.conf {os.path.join(root, "etc/resolv.conf")}')
+        os.system(f'mount --bind /dev {os.path.join(root, "dev")}')
+        os.system(f'mount --bind /proc {os.path.join(root, "proc")}')
+        os.system(f'mount --bind /sys {os.path.join(root, "sys")}')
         os.system(f"chroot {root} grub2-mkconfig -o /boot/grub2/grub.cfg")
 
     def systemdBoot(self):

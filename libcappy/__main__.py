@@ -262,7 +262,7 @@ def main(window: 'curses._CursesWindow'):
         "install": {
             "installroot": chroot,
             "volumes": [{'uuid': disk['UUID'], 'mountpoint': disk['NEW MOUNTPOINT'], 'filesystem': disk['FSTYPE'], 'dump': bool(disk['DUMP']), 'fsck': bool(disk['FSCK'])} for disk in disks],
-            "packages": envirn + groups + ['@core', 'nano', 'dnf', 'kernel'] + ifgrub,
+            "packages": envirn + groups + ['@core', 'nano', 'dnf', 'kernel', 'NetworkManager', 'dbus-daemon'] + ifgrub,
             "dnf_options": {
                 "install_weak_deps": True,
                 "releasever": 36,
