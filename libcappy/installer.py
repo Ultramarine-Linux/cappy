@@ -8,6 +8,7 @@ import os
 import re
 import shutil
 import subprocess
+from typing import Any
 from urllib.request import urlopen
 
 import yaml
@@ -27,13 +28,13 @@ class Config(object):
     def __init__(self, configfile: str):
         # read the configuration YAML file
         with open(configfile, 'r') as f:
-            self.config = yaml.load(f, Loader=yaml.FullLoader)['install']
+            self.config: dict[str, Any] = yaml.load(f, Loader=yaml.FullLoader)['install']
         # set the default values if not specified
         if 'installroot' not in self.config:
             self.config['installroot'] = '/mnt/sysimage'
 
 
-class CfgParser(Config):
+class CfgParser:
     """[summary]
     Parses specific parts of the DNFStrap configuration from YAML into readable data.
 
@@ -42,7 +43,7 @@ class CfgParser(Config):
     cfg = an instance of libcappy.installer.Config()
     """
 
-    def __init__(self, config: Config):
+    def __init__(self, config: dict[str, Any]):
         self.config = config
 
     def dump(self):
@@ -51,23 +52,11 @@ class CfgParser(Config):
     def fstab(self) -> list[dict[str, str | bool]]:
         """Parses the volumes section of the install and returns it as a proper fstab dictionary.
         """
-        volumes = self.config['volumes']
-        entry_def = {
-            'device': str,
-            'mountpoint': str,
-            'filesystem': str,
-            'opts': str,
-            'dump': bool,
-            'fsck': bool,
-        }
-        entry_def.setdefault('opts', 'defaults')
-        entry_def.setdefault('dump', False)
-        entry_def.setdefault('fsck', False)
         # fstab will be a list of entries, we'll deal with it later
-        fstab = []
-        for volume in volumes:
+        fstab: list[dict[str, str|bool]] = []
+        for volume in self.config['volumes']:
             # copy the entry dictionary
-            entry = entry_def.copy()
+            entry = {}
             # if uuid key exists, use it as device
             if 'uuid' in volume:
                 entry['device'] = 'UUID=' + volume['uuid']
@@ -77,19 +66,9 @@ class CfgParser(Config):
                 entry['device'] = volume['device']
             entry['mountpoint'] = volume['mountpoint']
             entry['filesystem'] = volume['filesystem']
-            # very long if-else statement i know, you guys are welcome to improve it
-            if 'opts' in volume:
-                entry['opts'] = volume['opts']
-            else:
-                entry['opts'] = 'defaults'
-            if 'dump' in volume:
-                entry['dump'] = volume['dump']
-            else:
-                entry['dump'] = False
-            if 'fsck' in volume:
-                entry['fsck'] = volume['fsck']
-            else:
-                entry['fsck'] = False
+            entry['opts'] = volume.get('opts', 'defaults')
+            entry['dump'] = volume.get('dump', False)
+            entry['fsck'] = volume.get('fsck', False)
             fstab.append(entry)
         return fstab
 
@@ -101,7 +80,7 @@ class Installer:
     Similar to the likes of Arch Linux's pacstrap.
     """
 
-    def __init__(self, config):
+    def __init__(self, config: str):
         """
         Initializes the Installer class.
 
@@ -173,16 +152,8 @@ class Installer:
                 f.write(f'{entry["mountpoint"]}\t')
                 f.write(f'{entry["filesystem"]}\t')
                 f.write(f'{entry["opts"]}\t')
-                if entry['dump'] == True:
-                    entry['dump'] = '1'
-                else:
-                    entry['dump'] = '0'
-                f.write(f'{entry["dump"]}\t')
-                if entry['fsck'] == True:
-                    entry['fsck'] = '1'
-                else:
-                    entry['fsck'] = '0'
-                f.write(f'{entry["fsck"]}\n')
+                f.write(f"{'1' if entry['dump'] else '0'}\t")
+                f.write(f"{'1' if entry['fsck'] else '0'}\t")
         self.logger.debug('Wrote fstab')
 
     def grubGen(self):
@@ -212,7 +183,7 @@ class Installer:
 
     def mount(self, table: list[dict[str, str | bool]]):
         for entry in table:
-            subprocess.run(f"mount {entry['device']} {self.cfgparse.config['installroot']}{entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
+            os.system(f"mount {entry['device']} {self.cfgparse.config['installroot']}{entry['mountpoint']}" + f"-o {entry['opts']}" if entry['opts'] else '')
 
 
 class Wizard:
@@ -226,8 +197,7 @@ class Wizard:
                 parts.append(parts[-1].copy())
                 parts[-1]['MOUNTPOINTS'] = l.strip()
                 continue
-            ls = l.split()
-            ls.append('')  # in case no mp
+            ls = l.split() + ['']  # in case no mp
             parts.append({
                 'NAME': ls[0],
                 'SIZE': ls[3],
@@ -246,9 +216,8 @@ class Wizard:
                 if last_field == field:
                     value = l[left:]
                 else:
-                    length = len(field)
-                    value = l[left:left+length]
-                    left += length
+                    left += len(field)
+                    value = l[left:left]
                 v = value.strip()
                 # first field
                 if (f := field.rstrip().upper()) == 'NAME':
@@ -291,12 +260,12 @@ class Wizard:
     def strip_lsblk(parts: DS):
         # we don't allow users to select their installation media as the target
         lsblk = [d for d in parts if d['MOUNTPOINTS'] not in ['/', '/boot/efi', '/boot']]
-        s = ['NAME', 'TYPE', 'FSTYPE', 'FSVER', 'LABEL', 'SIZE', 'MOUNTPOINTS', 'NEW MOUNTPOINT', 'OPTIONS', 'DUMP', 'FSCK', 'UUID', 'FSAVAIL', 'FSUSE%']
+        cols = ['NAME', 'TYPE', 'FSTYPE', 'FSVER', 'LABEL', 'SIZE', 'MOUNTPOINTS', 'NEW MOUNTPOINT', 'OPTIONS', 'DUMP', 'FSCK', 'UUID', 'FSAVAIL', 'FSUSE%']
         ds: DS = []
         for d in lsblk:
             new = {}
-            for ss in s:
-                new[ss] = d[ss]
+            for col in cols:
+                new[col] = d[col]
             ds.append(new)
         return ds
 
