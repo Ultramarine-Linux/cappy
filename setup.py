@@ -61,4 +61,7 @@ setup(
     cmdclass={
         'install': BuildRust,
     },
+    package_data={
+        "libcappy.templates": ["grub.cfg"]
+    },
 )
