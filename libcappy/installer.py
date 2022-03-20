@@ -216,8 +216,9 @@ class Wizard:
                 if last_field == field:
                     value = l[left:]
                 else:
-                    left += len(field)
-                    value = l[left:left]
+                    length = len(field)
+                    value = l[left:left+length]
+                    left += length
                 v = value.strip()
                 # first field
                 if (f := field.rstrip().upper()) == 'NAME':
