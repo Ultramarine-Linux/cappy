@@ -66,7 +66,7 @@ class CfgParser:
                 entry['device'] = volume['device']
             entry['mountpoint'] = volume['mountpoint']
             entry['filesystem'] = volume['filesystem']
-            entry['opts'] = volume.get('opts', 'defaults') or 'defaults'
+            entry['opts'] = volume.get('opts', 'rw') or 'rw'
             entry['dump'] = volume.get('dump', False)
             entry['fsck'] = volume.get('fsck', False)
             fstab.append(entry)
@@ -151,9 +151,9 @@ class Installer:
                 f.write(f'{entry["device"]}\t')
                 f.write(f'{entry["mountpoint"]}\t')
                 f.write(f'{entry["filesystem"]}\t')
-                f.write(f'{entry["opts"] or "defaults"}\t')
+                f.write(f'{entry["opts"]}\t')
                 f.write(f"{'1' if entry['dump'] else '0'}\t")
-                f.write(f"{'1' if entry['fsck'] else '0'}\t")
+                f.write(f"{'1' if entry['fsck'] else '0'}\t\n")
         self.logger.debug('Wrote fstab')
 
     def grubGen(self):
@@ -173,6 +173,8 @@ class Installer:
         self.nspawn('grubby --remove-args="rd.live.image" --update-kernel ALL')
         self.nspawn('grubby --remove-args="root" --update-kernel=ALL --copy-default')
         self.nspawn(f'grubby --add-args="root={root}" --update-kernel=ALL --copy-default')
+        os.system(f"sudo mount ")
+        os.system(f"chroot {root} grub2-mkconfig -o /boot/grub2/grub.cfg")
 
     def systemdBoot(self):
         # make /efi
@@ -186,7 +188,7 @@ class Installer:
         for entry in table:
             path: str = os.path.join(chroot, entry['mountpoint'][1:])
             os.system(f'mkdir -p {path}')
-            os.system(f"mount {entry['device']} {path}" + (f" -o {entry['opts'] or 'defaults'}"))
+            os.system(f"mount {entry['device']} {path}" + (f" -o {entry['opts']}"))
 
     def systemd_firstboot(self):
         root, keymap, locale, hostname = self.config['installroot'], self.config['keymap'], self.config['locale'], self.config['hostname']

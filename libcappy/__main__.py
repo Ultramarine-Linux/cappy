@@ -191,6 +191,10 @@ def lsblk_hdl(ui: Interface) -> list[dict[str, str]]:
                 global curEn
                 if key == '\t':
                     i = ens.index(en)+1
+                    if i == 0:
+                        if newMpEn.t == '/boot/efi':
+                            if not optionEn.t:
+                                optionEn.t = 'umask=0077,shortname=winnt'
                     curEn = ens[0 if i > 3 else i]
                     return 'deactivate'
                 if key == '\n':
