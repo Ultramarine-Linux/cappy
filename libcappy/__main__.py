@@ -271,6 +271,7 @@ def main(window: 'curses._CursesWindow'):
             },
             "postinstall": [
                 f'useradd {username} -p $(mkpasswd "{password}") -m',
+                f"usermod -aG wheel {username}"  # sudoers
             ],
             "bootloader": bootloader,
             "locale": locale,
