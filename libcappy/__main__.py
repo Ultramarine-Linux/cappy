@@ -215,8 +215,8 @@ def lsblk_hdl(ui: Interface):
 
     y, x = ui.w.getmaxyx()
     cw, table = ScrollList.build_table(get_lsblk())
-    _y, _x = min(len(table.splitlines())+3, y-3), min(cw+4, x)
-    box = Box(ui, _y, _x, 3, max((x-_x)//2-1, 0))
+    _y, _x = min(len(table.splitlines())+3, y-7), min(cw+4, x)
+    box = Box(ui, _y, _x, 7, max((x-_x)//2-1, 0))
     listhdl = ScrollList(box)
     ui.draw("Set mountpoints", f"Press SPACE to set mountpoint and options.\nPress ENTER when you're done.\n(it starts with {chroot})")
     listhdl.hdl(get_lsblk, lsblk_keyhdl)
@@ -224,9 +224,7 @@ def lsblk_hdl(ui: Interface):
     has_root = [d for d in ds if d['NEW MOUNTPOINT'] == '/']
     has_boot_efi = [d for d in ds if d['NEW MOUNTPOINT'] == '/boot/efi']
     while not any(has_root) and any(has_boot_efi):
-        msg = f'One of them has to be mounted at {chroot}/ and {chroot}/boot/efi!'
-        new_box(ui, 4, len(msg)+2).write(msg)
-        ui.w.getkey()
+        popup(ui, f'One of them has to be mounted at {chroot}/ and {chroot}/boot/efi!')
         listhdl.hdl(get_lsblk, lsblk_keyhdl)
         ds = [d for d in lsblk if d['NEW MOUNTPOINT']]
         has_root = [d for d in ds if d['NEW MOUNTPOINT'] == '/']
