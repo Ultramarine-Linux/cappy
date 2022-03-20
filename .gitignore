@@ -7,3 +7,5 @@ chroot/
 .tox/
 .pytest_cache/
 libcappy/parse_locales/target/
+cappyinstall.yml
+repo/

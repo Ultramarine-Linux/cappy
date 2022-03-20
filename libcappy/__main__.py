@@ -294,7 +294,7 @@ if not skipwizard:
     curses.endwin()
     os.system('nano /tmp/cappyinstall.yml')  # subprocess will run it in the bg unfortunately
     res = input("You've reached the end of the wizard. Ready to install? [y/N] ")
-p.join()
+    p.join()
 if res and res in 'Yy':
     print("!! THIS WILL ERASE YOUR DATA IF NOT CONFIGURED PROPERLY !!")
     if input("Still continue? [yes] ") == 'yes':
